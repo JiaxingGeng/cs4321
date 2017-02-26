@@ -1,5 +1,7 @@
 package cs4321.project2.operator;
 
+import java.io.IOException;
+
 /**
  * Abstract class for all relational operators. The implementation is based on 
  * iterator API.
@@ -14,18 +16,18 @@ public abstract class Operator {
 	 * 
 	 * @return the next tuple and null if no output is available
 	 */
-	public abstract Tuple getNextTuple();
+	public abstract Tuple getNextTuple() throws IOException;
 	
 	/**
 	 * Reset its state and start returning its output again from the beginning
 	 */	
-	public abstract void reset();
+	public abstract void reset() throws IOException;
 	
 	/**
 	 * Repeatedly get the next tuple until the end and write each tuple to 
 	 * a suitable PrintStream
 	 */
-	public void dump(){
+	public void dump() throws IOException{
 		Tuple t = this.getNextTuple();
 		if (t != null){
 			t.print();
