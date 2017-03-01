@@ -40,7 +40,7 @@ public class Interpreter {
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
 				Table table = (Table) plainSelect.getFromItem();
-				ScanOperator sOp = new ScanOperator(table,inputdir);
+				ScanOperator sOp = new ScanOperator(table,inputdir,catalog);
 				sOp.dump();
 			}			
 		} catch (Exception e) {

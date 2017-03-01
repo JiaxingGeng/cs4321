@@ -20,7 +20,7 @@ public class CatalogTest {
 		// test for wrong directory
 		//		try {Catalog catalog = Catalog.getInstance("abc");  fail();}
 		//		catch (IOException e) {}		
-		try {Catalog.getInstance("testCatalog");}
+		try {Catalog.getInstance("testFolder");}
 		catch (IOException e) {fail();}
 	}
 
@@ -29,12 +29,12 @@ public class CatalogTest {
 	 */
 	@Test
 	public void testGetTables(){
-		try {Catalog catalog = Catalog.getInstance("testCatalog");
+		try {Catalog catalog = Catalog.getInstance("testFolder");
 		LinkedList<String> tables = catalog.getTables();
 		assertEquals("Sailors",tables.get(0));
 		assertEquals("Reserves",tables.get(1));
 		assertEquals("Table",tables.get(2));
-		assertEquals(3,tables.size());}
+		assertEquals(4,tables.size());}
 		catch (IOException e) {e.printStackTrace();fail();}
 
 		// test whether the catalog will be changed for a different dir
@@ -43,7 +43,7 @@ public class CatalogTest {
 		assertEquals("Sailors",tables.get(0));
 		assertEquals("Reserves",tables.get(1));
 		assertEquals("Table",tables.get(2));
-		assertEquals(3,tables.size());}
+		assertEquals(4,tables.size());}
 		catch (IOException e) {e.printStackTrace();fail();}
 
 	}
@@ -53,7 +53,7 @@ public class CatalogTest {
 	 */
 	@Test
 	public void testGetAttributes(){
-		try {Catalog catalog =Catalog.getInstance("test/testCatalog");
+		try {Catalog catalog =Catalog.getInstance("test/testFolder");
 		assertEquals("Sailors: A B C",catalog.tableToString("Sailors"));
 		assertEquals("Reserves: G H",catalog.tableToString("Reserves"));
 		assertEquals("Table: A B C",catalog.tableToString("Table"));}

@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import net.sf.jsqlparser.schema.*;
+import cs4321.project2.*;
 
 /**
  * Scan the table from the file in the database
@@ -16,10 +17,12 @@ public class ScanOperator extends Operator{
 	
 	private BufferedReader bf;
 	private String dataPath;
+	private int numColumns;
 	
-	public ScanOperator(Table t,String dir) throws IOException{
-		dataPath = dir + "/db/data" + t.getName() +".txt";
+	public ScanOperator(Table t,String dir, Catalog cat) throws IOException{
+		dataPath = dir + "/db/data/" + t.getName();  // getName or getSchema?
 		bf = new BufferedReader(new FileReader(dataPath));
+		numColumns = cat.getAttributes(t.getName()).length;
 	}
 	
 	public Tuple getNextTuple() throws IOException{
@@ -28,7 +31,12 @@ public class ScanOperator extends Operator{
 			bf.close();
 			return null;
 		}
-		else return new Tuple(currentLine.split(","));
+		else {
+			Tuple tp =  new Tuple(currentLine.split(","));
+			if (tp.getColumns() == numColumns) return tp;
+			else throw new IOException
+			("each row should have same columns in the same database");
+		}
 	}
 	
 	public void reset() throws IOException{
