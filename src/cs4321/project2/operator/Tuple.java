@@ -14,6 +14,10 @@ public class Tuple {
 		return num;
 	}
 	
+	public String[] getAttributes() {
+		return attributes;
+	}
+	
 	public void print(){
 		for (String s: attributes) System.out.print(s + ", ");
 		System.out.println("");

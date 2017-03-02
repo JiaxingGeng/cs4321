@@ -1,0 +1,5 @@
+SELECT * FROM Sailors S WHERE S.A = 3;
+SELECT * FROM Sailors S WHERE S.A = S.B;
+SELECT * FROM Sailors S WHERE S.A < S.B;
+SELECT * FROM Sailors S WHERE S.B < S.C;
+SELECT * FROM Sailors S WHERE S.B < S.C AND S.A = 3

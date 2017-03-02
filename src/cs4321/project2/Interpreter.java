@@ -2,6 +2,7 @@ package cs4321.project2;
 
 import java.io.FileReader;
 
+import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.PlainSelect;
@@ -34,14 +35,26 @@ public class Interpreter {
 			
 			// parse the data
 			CCJSqlParser parser = 
-					new CCJSqlParser(new FileReader(inputdir+"/queries.sql"));
+					new CCJSqlParser(new FileReader(inputdir+"/queries_custom0.sql"));
 			Statement statement;
 			while ((statement = parser.Statement()) != null) {
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
 				Table table = (Table) plainSelect.getFromItem();
-				ScanOperator sOp = new ScanOperator(table,inputdir,catalog);
-				sOp.dump();
+				Expression expression = plainSelect.getWhere();
+				System.out.println("---New Query:---");
+				System.out.println(expression.toString());
+				//System.out.println("-----");
+				SelectOperator seOp = new SelectOperator(table, inputdir, catalog, expression);
+				seOp.getNextTuple();
+				seOp.getNextTuple();
+				seOp.getNextTuple();
+				seOp.getNextTuple();
+				seOp.getNextTuple();
+				seOp.getNextTuple();
+				seOp.dump();
+				//ScanOperator sOp = new ScanOperator(table, inputdir, catalog);
+				//sOp.dump();
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();

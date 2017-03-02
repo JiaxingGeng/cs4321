@@ -18,8 +18,9 @@ public class ScanOperator extends Operator{
 	private BufferedReader bf;
 	private String dataPath;
 	private int numColumns;
+	//private Tuple currTuple;
 	
-	public ScanOperator(Table t,String dir, Catalog cat) throws IOException{
+	public ScanOperator(Table t, String dir, Catalog cat) throws IOException{
 		dataPath = dir + "/db/data/" + t.getName();  // getName or getSchema?
 		bf = new BufferedReader(new FileReader(dataPath));
 		numColumns = cat.getAttributes(t.getName()).length;
@@ -32,8 +33,11 @@ public class ScanOperator extends Operator{
 			return null;
 		}
 		else {
-			Tuple tp =  new Tuple(currentLine.split(","));
-			if (tp.getColumns() == numColumns) return tp;
+			Tuple tp = new Tuple(currentLine.split(","));
+			if (tp.getColumns() == numColumns) {
+				//currTuple = tp;
+				return tp;
+			}
 			else throw new IOException
 			("each row should have same columns in the same database");
 		}
@@ -47,4 +51,10 @@ public class ScanOperator extends Operator{
 			bf = new BufferedReader(new FileReader(dataPath));
 		}		
 	}
+	
+	/*
+	public Tuple getCurrTuple() throws IOException {
+		return currTuple;
+	}
+	*/
 }

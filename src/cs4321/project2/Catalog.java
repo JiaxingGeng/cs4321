@@ -86,5 +86,9 @@ public class Catalog {
 		}
 		return res;
 	}
+	
+	public HashMap<String, String[]> getHashMap() {
+		return catalogHash;
+	}
 
 }
