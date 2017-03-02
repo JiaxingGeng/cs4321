@@ -28,6 +28,8 @@ public class Catalog {
 	 * Precondition: assume that the format is valid in schema.txt file
 	 * @param dir
 	 *            the directory that contains schema's
+	 *            it can be put into any string object if the catalog 
+	 *            is already initialized
 	 * @return catalog object
 	 */
 	public static synchronized Catalog getInstance(String dir) 
