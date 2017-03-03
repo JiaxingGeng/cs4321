@@ -6,15 +6,19 @@ package cs4321.project2.operator;
 import static org.junit.Assert.*;
 
 import java.io.FileReader;
+import java.util.HashMap;
+
 import org.junit.Test;
 
 import cs4321.project2.Catalog;
+import cs4321.project2.deparser.SelectDeParser;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.*;
+import java.io.IOException;
 
 /**
  * @author ronha_000
@@ -109,17 +113,22 @@ public class SelectOperatorTest {
 			String inputdir = "testFolder";
 			CCJSqlParser parser = new CCJSqlParser(new FileReader(inputdir + "/queries_custom0.sql"));
 			Statement statement;
-			Catalog.getInstance(inputdir);
+			Catalog catalog = Catalog.getInstance(inputdir);
 			while ((statement = parser.Statement()) != null) {
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
 				FromItem fromItem = plainSelect.getFromItem();
+				SelectDeParser selectVisitor = new SelectDeParser();
+			    fromItem.accept(selectVisitor);
+			    String tableName = selectVisitor.getResult();
+			    catalog.setColumnsHash(ColToIndexHash(tableName));
 				ScanOperator sOp = new ScanOperator(fromItem,inputdir);
 				Expression expression = plainSelect.getWhere();
 				System.out.print("----- New Query: ");
 				System.out.println(expression.toString() + " -----");
-				SelectOperator seOp = new SelectOperator(sOp, fromItem, expression);
+				SelectOperator seOp = new SelectOperator(sOp, expression);
 				seOp.dump(); // should print the results for this query
+				catalog.clearColumnsHash();
 			}			
 		}
 		catch (Exception e) {
@@ -127,6 +136,17 @@ public class SelectOperatorTest {
 			System.err.println(e.getMessage());
 			fail();
 		}
+	}
+	
+	private HashMap<String,Integer> ColToIndexHash(String tableTuple) 
+			throws IOException{
+		String[] tp = tableTuple.split(",");
+		Catalog catalog = Catalog.getInstance(null);
+		String[] attributes = catalog.getAttributes(tp[0]);
+		HashMap<String,Integer> res = new HashMap<>();
+		for (int i=0;i<attributes.length;i++) 
+			res.put(tp[1]+"."+attributes[i],i);
+		return res;	
 	}
 
 }
