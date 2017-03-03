@@ -31,30 +31,19 @@ public class Interpreter {
 			String inputdir = args[0];
 			String outputdir = args[1];
 						
-			Catalog catalog = Catalog.getInstance(inputdir); // build catalog
-			
+			Catalog.getInstance(inputdir); // build catalog			
 			// parse the data
 			CCJSqlParser parser = 
-					new CCJSqlParser(new FileReader(inputdir+"/queries_custom0.sql"));
+					new CCJSqlParser(new FileReader(inputdir+"/queries.sql"));
 			Statement statement;
 			while ((statement = parser.Statement()) != null) {
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
-				Table table = (Table) plainSelect.getFromItem();
-				Expression expression = plainSelect.getWhere();
-				System.out.println("---New Query:---");
-				System.out.println(expression.toString());
-				//System.out.println("-----");
-				SelectOperator seOp = new SelectOperator(table, inputdir, catalog, expression);
-				seOp.getNextTuple();
-				seOp.getNextTuple();
-				seOp.getNextTuple();
-				seOp.getNextTuple();
-				seOp.getNextTuple();
-				seOp.getNextTuple();
-				seOp.dump();
-				//ScanOperator sOp = new ScanOperator(table, inputdir, catalog);
-				//sOp.dump();
+				PlanGenerator queriesPlan = new PlanGenerator(plainSelect,inputdir);
+				Operator op = queriesPlan.getQueryPlan();
+				System.out.print("----- New Query: ");
+				System.out.println(plainSelect.toString() + " -----");				
+				op.dump();
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();

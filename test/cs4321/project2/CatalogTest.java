@@ -53,10 +53,5 @@ public class CatalogTest {
 	 */
 	@Test
 	public void testGetAttributes(){
-		try {Catalog catalog =Catalog.getInstance("test/testFolder");
-		assertEquals("Sailors: A B C",catalog.tableToString("Sailors"));
-		assertEquals("Reserves: G H",catalog.tableToString("Reserves"));
-		assertEquals("Table: A B C",catalog.tableToString("Table"));}
-		catch (IOException e) {e.printStackTrace();fail();}
 	}
 }

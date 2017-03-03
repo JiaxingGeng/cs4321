@@ -5,12 +5,11 @@ package cs4321.project2.operator;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-
 import cs4321.project2.Catalog;
+import cs4321.project2.deparser.*;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.statement.select.FromItem;
+
 
 /**
  * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
@@ -19,50 +18,34 @@ import net.sf.jsqlparser.schema.Table;
 public class SelectOperator extends Operator {
 	
 	private ScanOperator sOp;
-	private LinkedList<Tuple> result;
 	private HashMap<String, Integer> colToIndexHash;
 	private Expression exp;
 	
-	public SelectOperator(Table t, String dir, Catalog cat, Expression exp) throws IOException {
-		sOp = new ScanOperator(t, dir, cat);
-		colToIndexHash = getColToIndexHash(cat.getHashMap().get(t.getName()));
-		result = new LinkedList<Tuple> ();
+	public SelectOperator(ScanOperator sOp, FromItem fromItem, Expression exp) 
+			throws IOException {
+		SelectDeParser selectVisitor = new SelectDeParser();
+	    fromItem.accept(selectVisitor);
+	    String tableName = selectVisitor.getResult();
+		Catalog cat = Catalog.getInstance(null);
+		colToIndexHash = cat.getAttributes(tableName);	
 		this.exp = exp;
+		this.sOp = sOp;
 	}
 	
-	HashMap<String, Integer> getColToIndexHash(String[] cols) {
-		HashMap<String, Integer> myHash = new HashMap<String, Integer> ();
-		for (int i = 0; i < cols.length; i++) {
-			myHash.put(cols[i], i);
-		}
-		return myHash;
-	}
-	
-	@Override
-	public void dump() throws IOException {
-		for (Tuple t : result) {
-			t.print();
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see cs4321.project2.operator.Operator#getNextTuple()
-	 */
 	@Override
 	public Tuple getNextTuple() throws IOException {
 		Tuple nextTuple = sOp.getNextTuple();
 		if (nextTuple == null) return null;
-		cs4321ExpressionVisitor ev = new cs4321ExpressionVisitor(nextTuple, colToIndexHash);
+		ExpressionDeParser ev = new ExpressionDeParser(nextTuple, colToIndexHash);
 		exp.accept(ev);
-		if (ev.getFinalResult()) {
-			result.add(nextTuple);
-		} 
-		return nextTuple;
+		if (Boolean.parseBoolean(ev.getResult())) {
+			return nextTuple;
+		} else {
+			return this.getNextTuple();
+		}
+		
 	}
 
-	/* (non-Javadoc)
-	 * @see cs4321.project2.operator.Operator#reset()
-	 */
 	@Override
 	public void reset() throws IOException {
 		sOp.reset();

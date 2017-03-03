@@ -17,16 +17,16 @@ public class ScanOperatorTest {
 	@Test
 	public void testGetNextTuple() {
 		Table t = new Table(null,"Boats");
-		try{ Catalog catalog = Catalog.getInstance("testFolder");
-		ScanOperator so = new ScanOperator(t,"testFolder",catalog);
+		try{ Catalog.getInstance("testFolder");
+		ScanOperator so = new ScanOperator(t,"testFolder");
 		so.getNextTuple().print();   // print 101, 2, 3,
 		so.getNextTuple().print();   // raise exception for empty line
 		fail();
 		} catch (IOException e) {}
 		
 		t = new Table(null,"Reserves");
-		try{ Catalog catalog = Catalog.getInstance("testFolder");
-		ScanOperator so = new ScanOperator(t,"testFolder",catalog);
+		try{ Catalog.getInstance("testFolder");
+		ScanOperator so = new ScanOperator(t,"testFolder");
 		so.getNextTuple();   
 		so.getNextTuple();
 		so.getNextTuple();
@@ -40,8 +40,8 @@ public class ScanOperatorTest {
 	@Test
 	public void testReset(){
 		Table t = new Table(null,"Reserves");
-		try{ Catalog catalog = Catalog.getInstance("testFolder");
-		ScanOperator so = new ScanOperator(t,"testFolder",catalog);
+		try{ Catalog.getInstance("testFolder");
+		ScanOperator so = new ScanOperator(t,"testFolder");
 		so.getNextTuple();   
 		so.getNextTuple();
 		so.getNextTuple();
@@ -66,8 +66,8 @@ public class ScanOperatorTest {
 		 * 4, 104, 
 		 */
 		Table t = new Table(null,"Reserves");
-		try{ Catalog catalog = Catalog.getInstance("testFolder");
-		ScanOperator so = new ScanOperator(t,"testFolder",catalog);
+		try{ Catalog.getInstance("testFolder");
+		ScanOperator so = new ScanOperator(t,"testFolder");
 		System.out.println("Reserves Table Print:");
 		so.dump();   
 		so.reset();

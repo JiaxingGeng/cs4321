@@ -3,8 +3,9 @@ package cs4321.project2.operator;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import net.sf.jsqlparser.schema.*;
+import net.sf.jsqlparser.statement.select.FromItem;
 import cs4321.project2.*;
+import cs4321.project2.deparser.*;
 
 /**
  * Scan the table from the file in the database
@@ -18,12 +19,15 @@ public class ScanOperator extends Operator{
 	private BufferedReader bf;
 	private String dataPath;
 	private int numColumns;
-	//private Tuple currTuple;
 	
-	public ScanOperator(Table t, String dir, Catalog cat) throws IOException{
-		dataPath = dir + "/db/data/" + t.getName();  // getName or getSchema?
+	public ScanOperator(FromItem fromItem, String dir) throws IOException{
+	    SelectDeParser selectVisitor = new SelectDeParser();
+	    fromItem.accept(selectVisitor);
+	    String tableName = selectVisitor.getResult();
+		dataPath = dir + "/db/data/" + tableName; 
 		bf = new BufferedReader(new FileReader(dataPath));
-		numColumns = cat.getAttributes(t.getName()).length;
+		Catalog cat = Catalog.getInstance(null);
+		numColumns = cat.getAttributes(tableName).size();
 	}
 	
 	public Tuple getNextTuple() throws IOException{
@@ -35,7 +39,6 @@ public class ScanOperator extends Operator{
 		else {
 			Tuple tp = new Tuple(currentLine.split(","));
 			if (tp.getColumns() == numColumns) {
-				//currTuple = tp;
 				return tp;
 			}
 			else throw new IOException
@@ -52,9 +55,4 @@ public class ScanOperator extends Operator{
 		}		
 	}
 	
-	/*
-	public Tuple getCurrTuple() throws IOException {
-		return currTuple;
-	}
-	*/
 }

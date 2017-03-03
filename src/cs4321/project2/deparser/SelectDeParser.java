@@ -1,26 +1,34 @@
 package cs4321.project2.deparser;
 
 import net.sf.jsqlparser.statement.select.*;
-import cs4321.project2.*;
-import java.io.IOException;
+import net.sf.jsqlparser.expression.*;
+import net.sf.jsqlparser.schema.*;
 
+/**
+ * A class to de-parse (that is, tranform from JSqlParser hierarchy 
+ * into a string) a Select
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ *
+ */
 
-public class SelectDeParser implements SelectItemVisitor {
+public class SelectDeParser implements SelectItemVisitor, FromItemVisitor {
 	
-	private Catalog catalog;
-	private StringBuffer sb;
+	private String res;
+	private ExpressionDeParser expressionVisitor;
 	
-	public SelectDeParser() throws IOException{
-		Catalog c = Catalog.getInstance("");
-		catalog = c;	
+	public SelectDeParser(){};
+	
+	public SelectDeParser(ExpressionDeParser expressionVisitor){	
+		res = null;
+		this.expressionVisitor = expressionVisitor;
 	}
 	
-	public StringBuffer getBuffer(){
-		return sb;
+	public String getResult(){
+		return res;
 	}
 	
 	public void visit(AllColumns allColumns){
-		sb = new StringBuffer("");
+		res = allColumns.toString();
 	}
 	
 	public void visit(AllTableColumns allTableColumns){
@@ -28,8 +36,21 @@ public class SelectDeParser implements SelectItemVisitor {
 	}
 	
 	public void visit(SelectExpressionItem selectExpressionItem){
-		ExpressionDeParser expressionVisitor = new ExpressionDeParser();
-		expressionVisitor.visit(selectExpressionItem);
-		sb = expressionVisitor.getBuffer();	
+		Expression expression = selectExpressionItem.getExpression();
+		expression.accept(expressionVisitor);
+		res = expressionVisitor.getResult();
 	}
+	
+	public void visit(Table tableName) {
+		res = tableName.getName();
+	}
+	
+	public void visit(SubSelect subSelect) {
+		
+	}
+	
+	public void visit(SubJoin subjoin){
+		
+	}
+	
 }

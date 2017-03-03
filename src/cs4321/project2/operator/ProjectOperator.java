@@ -1,14 +1,11 @@
 package cs4321.project2.operator;
 
-import cs4321.project2.Catalog;
 import java.io.IOException;
 import net.sf.jsqlparser.statement.select.*;
-import net.sf.jsqlparser.schema.*;
 import java.util.LinkedList;
-
-import java.util.Arrays;
-import java.util.List;
-import cs4321.project2.deparser.SelectDeParser;;
+import java.util.*;
+import cs4321.project2.deparser.*;
+import cs4321.project2.*;
 
 
 /**
@@ -20,32 +17,38 @@ import cs4321.project2.deparser.SelectDeParser;;
 
 public class ProjectOperator extends Operator {
 	private Operator child;
-	private PlainSelect ps;
-	private String[] attributes;
+	private List<?> selectItems;
 	private Catalog catalog;
+	private String table;
 	
-	public ProjectOperator(Operator c, PlainSelect p) throws IOException{
+	public ProjectOperator(Operator c, List<?> selectItems, FromItem fromItem) 
+			throws IOException{
 		child = c;
-		ps = p;
+		this.selectItems = selectItems;	
 		catalog = Catalog.getInstance(null);
-		Table table = (Table) p.getFromItem();
-		attributes = catalog.getAttributes(table.getName());
+		SelectDeParser selectVisitor = new SelectDeParser();
+	    fromItem.accept(selectVisitor);
+	    table = selectVisitor.getResult();
 	}
 	
 	public Tuple getNextTuple() throws IOException{
 		Tuple t = child.getNextTuple();
-		LinkedList<String> stringList = new LinkedList<>();
-		int num = ps.getSelectItems().size();
+		if (t == null) return null;
+		LinkedList<String> projList = new LinkedList<>();
+		int num = selectItems.size();
 		for (int i=0;i<num;i++){
-			SelectItem selectItem = (SelectItem) ps.getSelectItems().get(i);
-			SelectDeParser selectDeParser = new SelectDeParser();
+			SelectItem selectItem =(SelectItem) selectItems.get(i);
+			ExpressionDeParser expressionVisitor = 
+					new ExpressionDeParser(t,catalog.getAttributes(table));		
+			SelectDeParser selectDeParser = new SelectDeParser(expressionVisitor);
 			selectItem.accept(selectDeParser);
-			String selectColumn = selectDeParser.getBuffer().toString();
-			int pos = Arrays.binarySearch(attributes,selectColumn);
-			if (pos>=0) stringList.add(t.getElement(pos));
-			else throw new IOException("cannot find Column");
+			String selectColumn = selectDeParser.getResult().toString();
+			// case: select AllColumns 
+			if (selectColumn.equals("*")) return t;	
+			// Assume the other case is Column
+			projList.add(selectColumn);
 		}
-		return new Tuple(stringList.toArray(new String[stringList.size()]));		
+		return new Tuple(projList.toArray(new String[projList.size()]));		
 	}
 	
 	public void reset() throws IOException{

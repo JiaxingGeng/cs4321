@@ -1,6 +1,5 @@
 package cs4321.project2;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.io.FileReader;
@@ -16,7 +15,7 @@ import java.io.IOException;
  */
 public class Catalog {
 	
-	private static HashMap<String,String[]> catalogHash; 
+	private static HashMap<String,HashMap<String,Integer>> catalogHash; 
 	private static LinkedList<String> tables;
 	private static Catalog instance;
 	
@@ -45,8 +44,10 @@ public class Catalog {
 				String[] entries = currentLine.split("\\s+");
 				if (entries.length>=2){
 					tables.add(entries[0]);
-					catalogHash.put(entries[0],
-							Arrays.copyOfRange(entries, 1, entries.length));
+					HashMap<String,Integer> colToIndexHash= new HashMap<>();
+					for (int i=1;i<entries.length;i++)
+						colToIndexHash.put(entries[i], i-1);					
+					catalogHash.put(entries[0],colToIndexHash);
 				}
 			}
 			bf.close();
@@ -66,31 +67,10 @@ public class Catalog {
 	 * Get the attributes of a table
 	 * @param table
 	 *             name of the table
-	 * @return string array that contains all the attributes
+	 * @return hashmap that contains all the attributes with its index
 	 */
-	public String[] getAttributes(String table){
+	public HashMap<String,Integer> getAttributes(String table){
 		return catalogHash.get(table);
-	}
-	
-	/**
-	 * Convert table and its attributes to string for tests.
-	 * The form of the string is "table: attribute1 attribute2..."
-	 * @param table
-	 *             name of the table
-	 * @return string contains table and attributes
-	 */
-	public String tableToString(String table){
-		String[] attributes = this.getAttributes(table);
-		String res = table + ":";
-		if (attributes != null && attributes.length>0){
-			for(String attr : attributes)
-				res = res + " " + attr;
-		}
-		return res;
-	}
-	
-	public HashMap<String, String[]> getHashMap() {
-		return catalogHash;
 	}
 
 }
