@@ -9,7 +9,6 @@ import cs4321.project2.*;
 
 
 /**
- * Scan the table from the file in the database
  * 
  * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
  */
@@ -19,16 +18,12 @@ public class ProjectOperator extends Operator {
 	private Operator child;
 	private List<?> selectItems;
 	private Catalog catalog;
-	private String table;
 	
-	public ProjectOperator(Operator c, List<?> selectItems, FromItem fromItem) 
+	public ProjectOperator(Operator c, List<?> selectItems) 
 			throws IOException{
 		child = c;
 		this.selectItems = selectItems;	
 		catalog = Catalog.getInstance(null);
-		SelectDeParser selectVisitor = new SelectDeParser();
-	    fromItem.accept(selectVisitor);
-	    table = selectVisitor.getResult();
 	}
 	
 	public Tuple getNextTuple() throws IOException{
@@ -39,7 +34,7 @@ public class ProjectOperator extends Operator {
 		for (int i=0;i<num;i++){
 			SelectItem selectItem =(SelectItem) selectItems.get(i);
 			ExpressionDeParser expressionVisitor = 
-					new ExpressionDeParser(t,catalog.getAttributes(table));		
+					new ExpressionDeParser(t,catalog.getColumnsHash());		
 			SelectDeParser selectDeParser = new SelectDeParser(expressionVisitor);
 			selectItem.accept(selectDeParser);
 			String selectColumn = selectDeParser.getResult().toString();

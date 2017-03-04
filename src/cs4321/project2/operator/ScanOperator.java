@@ -23,11 +23,12 @@ public class ScanOperator extends Operator{
 	public ScanOperator(FromItem fromItem, String dir) throws IOException{
 	    SelectDeParser selectVisitor = new SelectDeParser();
 	    fromItem.accept(selectVisitor);
-	    String tableName = selectVisitor.getResult();
+	    String[] tableTuple = selectVisitor.getResult().split(",");
+	    String tableName = tableTuple[0];
 		dataPath = dir + "/db/data/" + tableName; 
 		bf = new BufferedReader(new FileReader(dataPath));
 		Catalog cat = Catalog.getInstance(null);
-		numColumns = cat.getAttributes(tableName).size();
+		numColumns = cat.getAttributes(tableName).length;
 	}
 	
 	public Tuple getNextTuple() throws IOException{

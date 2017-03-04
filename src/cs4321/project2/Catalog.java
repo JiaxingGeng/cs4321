@@ -2,6 +2,7 @@ package cs4321.project2;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Arrays;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +16,8 @@ import java.io.IOException;
  */
 public class Catalog {
 	
-	private static HashMap<String,HashMap<String,Integer>> catalogHash; 
+	private static HashMap<String,String[]> catalogHash; 
+	private static HashMap<String,Integer> columnsHash;
 	private static LinkedList<String> tables;
 	private static Catalog instance;
 	
@@ -38,16 +40,15 @@ public class Catalog {
 			BufferedReader bf = new BufferedReader
 					(new FileReader(dir+"/db/schema.txt"));
 			catalogHash = new HashMap<>();
+			columnsHash = new HashMap<>();
 			tables = new LinkedList<>();
 			String currentLine;
 			while ((currentLine = bf.readLine()) != null ){
 				String[] entries = currentLine.split("\\s+");
 				if (entries.length>=2){
 					tables.add(entries[0]);
-					HashMap<String,Integer> colToIndexHash= new HashMap<>();
-					for (int i=1;i<entries.length;i++)
-						colToIndexHash.put(entries[i], i-1);					
-					catalogHash.put(entries[0],colToIndexHash);
+					catalogHash.put
+					(entries[0], Arrays.copyOfRange(entries, 1, entries.length));
 				}
 			}
 			bf.close();
@@ -67,10 +68,21 @@ public class Catalog {
 	 * Get the attributes of a table
 	 * @param table
 	 *             name of the table
-	 * @return hashmap that contains all the attributes with its index
+	 * @return string array that contains all the attributes
 	 */
-	public HashMap<String,Integer> getAttributes(String table){
+	public String[] getAttributes(String table){
 		return catalogHash.get(table);
 	}
+	
+	public void setColumnsHash(HashMap<String,Integer> columnsHash){
+		Catalog.columnsHash = columnsHash;
+	}
 
+	public HashMap<String,Integer> getColumnsHash(){
+		return columnsHash;
+	}
+
+	public void clearColumnsHash(){
+		columnsHash.clear();
+	}
 }
