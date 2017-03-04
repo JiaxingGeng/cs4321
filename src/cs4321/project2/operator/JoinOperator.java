@@ -18,6 +18,7 @@ public class JoinOperator extends Operator {
 	private Operator rightOp;
 	private Expression expression;
 	private Catalog catalog;
+	private Tuple leftTuple;
 	
 	
 	public JoinOperator(Operator op1, Operator op2,Expression expression)
@@ -26,9 +27,17 @@ public class JoinOperator extends Operator {
 		rightOp= op2;
 		this.expression = expression;	
 		catalog = Catalog.getInstance(null);
+		leftTuple = leftOp.getNextTuple();
 	}
 	
 	public Tuple getNextTuple() throws IOException{
+		if (leftTuple==null) return null;
+		Tuple t2 = rightOp.getNextTuple();
+		if (t2==null) {
+			rightOp.reset();
+			t2 = rightOp.getNextTuple();
+		}
+		
 		
 		
 		
