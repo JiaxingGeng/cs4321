@@ -2,6 +2,7 @@ package cs4321.project2;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+
 import java.util.Arrays;
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ public class Catalog {
 	private static HashMap<String,Integer> columnsHash;
 	private static LinkedList<String> tables;
 	private static Catalog instance;
+	private static String dir;
 	
 	private Catalog() {}
 	
@@ -36,6 +38,7 @@ public class Catalog {
 	public static synchronized Catalog getInstance(String dir) 
 			throws IOException{
 		if (instance == null){
+			Catalog.dir = dir;
 			instance = new Catalog();
 			BufferedReader bf = new BufferedReader
 					(new FileReader(dir+"/db/schema.txt"));
@@ -81,8 +84,17 @@ public class Catalog {
 	public HashMap<String,Integer> getColumnsHash(){
 		return columnsHash;
 	}
+	
+	public void addColumnsHash(String s, int col){
+		columnsHash.put(s,col);
+	}
 
 	public void clearColumnsHash(){
 		columnsHash.clear();
 	}
+	
+	public String getInputDir(){
+		return dir;
+	}
+	
 }

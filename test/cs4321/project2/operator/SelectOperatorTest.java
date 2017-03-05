@@ -122,7 +122,7 @@ public class SelectOperatorTest {
 			    fromItem.accept(selectVisitor);
 			    String tableName = selectVisitor.getResult();
 			    catalog.setColumnsHash(ColToIndexHash(tableName));
-				ScanOperator sOp = new ScanOperator(fromItem,inputdir);
+				ScanOperator sOp = new ScanOperator(fromItem);
 				Expression expression = plainSelect.getWhere();
 				System.out.print("----- New Query: ");
 				System.out.println(expression.toString() + " -----");
@@ -140,7 +140,7 @@ public class SelectOperatorTest {
 	
 	private HashMap<String,Integer> ColToIndexHash(String tableTuple) 
 			throws IOException{
-		String[] tp = tableTuple.split(",");
+		String[] tp = tableTuple.split("\\.");
 		Catalog catalog = Catalog.getInstance(null);
 		String[] attributes = catalog.getAttributes(tp[0]);
 		HashMap<String,Integer> res = new HashMap<>();

@@ -5,7 +5,6 @@ import net.sf.jsqlparser.expression.Expression;
 import java.io.IOException;
 import java.util.HashMap;
 import cs4321.project2.deparser.*;
-import cs4321.project2.*;
 
 /**
  * 
@@ -13,48 +12,54 @@ import cs4321.project2.*;
  */
 
 public class JoinOperator extends Operator {
-	
+
 	private Operator leftOp;
 	private Operator rightOp;
 	private Expression expression;
-	private Catalog catalog;
 	private Tuple leftTuple;
-	
-	
+	HashMap<String, Integer> columnsHash;
+
+
 	public JoinOperator(Operator op1, Operator op2,Expression expression)
 			throws IOException{
 		leftOp = op1;
 		rightOp= op2;
 		this.expression = expression;	
-		catalog = Catalog.getInstance(null);
 		leftTuple = leftOp.getNextTuple();
+		String[] columns1 = op1.getColumns();
+		String[] columns2 = op2.getColumns();		
+		super.columns = new String[columns1.length + columns2.length];
+		   System.arraycopy(columns1, 0, super.columns, 0, columns1.length);
+		   System.arraycopy(columns2, 0, 
+				   super.columns, columns1.length, columns2.length);
+		columnsHash = this.getColumnsHash();	
 	}
-	
+
 	public Tuple getNextTuple() throws IOException{
 		if (leftTuple==null) return null;
-		Tuple t2 = rightOp.getNextTuple();
-		if (t2==null) {
+		Tuple rightTuple = rightOp.getNextTuple();
+		if (rightTuple==null) {
 			rightOp.reset();
-			t2 = rightOp.getNextTuple();
+			rightTuple = rightOp.getNextTuple();
 		}
-		
-		
-		
-		
-		return null;
+		Tuple joinTuple = leftTuple.joins(rightTuple);
+		if (expression == null){
+			return joinTuple;
+		} else {
+			ExpressionDeParser ev = new ExpressionDeParser(joinTuple, columnsHash);
+			expression.accept(ev);
+			if (Boolean.parseBoolean(ev.getResult())) {
+				return joinTuple;
+			} else {
+				return this.getNextTuple();
+			}
+		}
 	}
-	
+
 
 	public void reset() throws IOException{
-		
+		leftOp.reset();
+		rightOp.reset();
 	}
-	
-//	private HashMap<String,Integer> JoinHashMap
-//	(String table1, String table2){
-//		HashMap<String,Integer> joinHashMap = new HashMap<>();
-//		HashMap<String,Integer> attr1 = catalog.getAttributes(table1);
-//		HashMap<String,Integer> attr2 = catalog.getAttributes(table2);
-//
-//		return null;
-//	}
+
 }

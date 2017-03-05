@@ -17,8 +17,9 @@ public class ScanOperatorTest {
 	@Test
 	public void testGetNextTuple() {
 		Table t = new Table(null,"Boats");
+		t.setAlias("B");
 		try{ Catalog.getInstance("testFolder");
-		ScanOperator so = new ScanOperator(t,"testFolder");
+		ScanOperator so = new ScanOperator(t);
 		so.getNextTuple().print();   // print 101, 2, 3,
 		so.getNextTuple().print();   // raise exception for empty line
 		fail();
@@ -26,7 +27,7 @@ public class ScanOperatorTest {
 		
 		t = new Table(null,"Reserves");
 		try{ Catalog.getInstance("testFolder");
-		ScanOperator so = new ScanOperator(t,"testFolder");
+		ScanOperator so = new ScanOperator(t);
 		so.getNextTuple();   
 		so.getNextTuple();
 		so.getNextTuple();
@@ -41,7 +42,7 @@ public class ScanOperatorTest {
 	public void testReset(){
 		Table t = new Table(null,"Reserves");
 		try{ Catalog.getInstance("testFolder");
-		ScanOperator so = new ScanOperator(t,"testFolder");
+		ScanOperator so = new ScanOperator(t);
 		so.getNextTuple();   
 		so.getNextTuple();
 		so.getNextTuple();
@@ -67,12 +68,15 @@ public class ScanOperatorTest {
 		 */
 		Table t = new Table(null,"Reserves");
 		try{ Catalog.getInstance("testFolder");
-		ScanOperator so = new ScanOperator(t,"testFolder");
+		ScanOperator so = new ScanOperator(t);
 		System.out.println("Reserves Table Print:");
 		so.dump();   
 		so.reset();
 		System.out.println("Reserves Table Print:");
 		so.dump();
-		} catch (IOException e) {fail();}	
+		} catch (IOException e) 
+		{e.printStackTrace();
+		System.err.println(e.getMessage());
+		fail();}	
 	}
 }

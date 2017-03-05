@@ -1,6 +1,7 @@
 package cs4321.project2.operator;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Abstract class for all relational operators. The implementation is based on 
@@ -10,6 +11,8 @@ import java.io.IOException;
  */
 
 public abstract class Operator {
+	
+	protected String[] columns;
 	
 	/**
 	 *  Get the next tuple of the operator’s output
@@ -34,4 +37,14 @@ public abstract class Operator {
 			this.dump();
 		}
 	}
+	public String[] getColumns(){
+		return columns;
+	}
+	
+	public HashMap<String, Integer> getColumnsHash(){
+		HashMap<String, Integer> hashMap = new HashMap<>();
+		for(int i=0;i<columns.length;i++) hashMap.put(columns[i], i);
+		return hashMap;
+	}
+	
 }

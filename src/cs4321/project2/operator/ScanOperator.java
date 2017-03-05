@@ -20,15 +20,23 @@ public class ScanOperator extends Operator{
 	private String dataPath;
 	private int numColumns;
 	
-	public ScanOperator(FromItem fromItem, String dir) throws IOException{
+	public ScanOperator(FromItem fromItem) throws IOException{
 	    SelectDeParser selectVisitor = new SelectDeParser();
 	    fromItem.accept(selectVisitor);
-	    String[] tableTuple = selectVisitor.getResult().split(",");
+	    String[] tableTuple = selectVisitor.getResult().split("\\.");
 	    String tableName = tableTuple[0];
-		dataPath = dir + "/db/data/" + tableName; 
-		bf = new BufferedReader(new FileReader(dataPath));
 		Catalog cat = Catalog.getInstance(null);
-		numColumns = cat.getAttributes(tableName).length;
+		String[] attributes = cat.getAttributes(tableName);
+		numColumns = attributes.length;
+		String[] columns = new String[numColumns];
+		for (int i=0;i<numColumns;i++){
+			if (!tableTuple[1].equals("null"))
+				columns[i] = tableTuple[1] + "." + attributes[i];
+			else columns[i] = tableTuple[0] + "." + attributes[i];
+		}
+		super.columns = columns;
+		dataPath = cat.getInputDir() + "/db/data/" + tableName; 
+		bf = new BufferedReader(new FileReader(dataPath));
 	}
 	
 	public Tuple getNextTuple() throws IOException{

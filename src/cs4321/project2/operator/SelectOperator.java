@@ -2,7 +2,6 @@ package cs4321.project2.operator;
 
 import java.io.IOException;
 import java.util.HashMap;
-import cs4321.project2.Catalog;
 import cs4321.project2.deparser.*;
 import net.sf.jsqlparser.expression.Expression;
 
@@ -15,14 +14,13 @@ public class SelectOperator extends Operator {
 	private ScanOperator sOp;
 	private HashMap<String, Integer> colToIndexHash;
 	private Expression exp;
-	private Catalog catalog;
 	
 	public SelectOperator(ScanOperator sOp, Expression exp) 
 			throws IOException {
-		catalog = Catalog.getInstance(null);
-		colToIndexHash = catalog.getColumnsHash();
 		this.exp = exp;
 		this.sOp = sOp;
+		super.columns = sOp.getColumns();
+		colToIndexHash = this.getColumnsHash();
 	}
 	
 	@Override

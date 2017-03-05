@@ -42,7 +42,7 @@ public class SelectDeParser implements SelectItemVisitor, FromItemVisitor {
 	}
 	
 	public void visit(Table tableName) {
-		res = tableName.getName()+","+tableName.getAlias();
+		res = tableName.getName()+"."+tableName.getAlias();
 	}
 	
 	public void visit(SubSelect subSelect) {
