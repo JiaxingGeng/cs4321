@@ -26,9 +26,10 @@ import java.io.IOException;
  */
 public class SelectOperatorTest {
 
-	/**
-	 * Test method for {@link cs4321.project2.operator.SelectOperator#getNextTuple()}.
-	 */
+	
+//	/**
+//	 * Test method for {@link cs4321.project2.operator.SelectOperator#getNextTuple()}.
+//	 */
 //	@Test
 //	public void testGetNextTuple() {
 //		System.out.println("----------------------");
@@ -47,13 +48,12 @@ public class SelectOperatorTest {
 //				Expression expression = plainSelect.getWhere();
 //				System.out.print("----- New Query: ");
 //				System.out.println(expression.toString() + " -----");
-//				SelectOperator seOp = new SelectOperator(sOp, fromItem, expression);
-//				seOp.getNextTuple().print(); // should print 1,200,50,
-//				seOp.getNextTuple().print(); // should print 2,200,200,
-//				seOp.getNextTuple().print(); // should print 3,100,105
-//				seOp.getNextTuple().print(); // should print 3,100,50
-//				seOp.getNextTuple().print(); // should print 5,100,500
-//				seOp.getNextTuple().print(); // should print 6,300,400
+//				SelectOperator seOp = new SelectOperator(sOp, expression);
+//				Tuple nextTuple = seOp.getNextTuple();
+//				while (nextTuple != null) {
+//					nextTuple.print(); // Should print all the qualified tuples for the current query
+//					nextTuple = seOp.getNextTuple();
+//				}
 //			}			
 //		}
 //		catch (Exception e) {
@@ -65,7 +65,7 @@ public class SelectOperatorTest {
 //
 //	/**
 //	 * Test method for {@link cs4321.project2.operator.SelectOperator#reset()}.
-//	 */
+//     */	 
 //	@Test
 //	public void testReset() {
 //		System.out.println("---------------");
@@ -84,14 +84,13 @@ public class SelectOperatorTest {
 //				Expression expression = plainSelect.getWhere();
 //				System.out.print("----- New Query: ");
 //				System.out.println(expression.toString() + " -----");
-//				SelectOperator seOp = new SelectOperator(sOp, fromItem, expression);
-//				seOp.getNextTuple().print(); // should print 1,200,50,
-//				seOp.getNextTuple().print(); // should print 2,200,200,
-//				seOp.getNextTuple().print(); // should print 3,100,105
-//				seOp.reset();
-//				seOp.getNextTuple().print(); // should print 1,200,50
-//				seOp.getNextTuple().print(); // should print 2,200,200
-//				seOp.getNextTuple().print(); // should print 3,100,105
+//				SelectOperator seOp = new SelectOperator(sOp, expression);
+//				Tuple nextTuple = seOp.getNextTuple();
+//				if (nextTuple != null) {
+//					nextTuple.print();
+//					seOp.reset();
+//					seOp.getNextTuple().print(); // Should print the first qualified tuple twice, if there is any qualified tuples.
+//				}
 //			}			
 //		}
 //		catch (Exception e) {
