@@ -7,21 +7,46 @@ import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.SubSelect;
 
+/**
+ * Visitor to build query tree from Expression. Only support expressions connected
+ * by AND.
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ *
+ */
 public class QueryTreeVisitor implements ExpressionVisitor {
 	
 	
 	private String column;
-	private QueryTree queryTree;
-		
+	private static QueryTree queryTree;
+	
 	public QueryTreeVisitor(){
 		column = null;
-		queryTree = new QueryTree();
-	}
-	
-	public String getColumn(){
-		return column;
 	}
 		
+	/**
+	 * Constructor for the visitor
+	 * @param queryTree empty query tree structure
+	 */
+	public QueryTreeVisitor(QueryTree queryTree){
+		column = null;
+		QueryTreeVisitor.queryTree  = queryTree;
+	}
+	
+	/**
+	 * get the final query tree
+	 * @return query tree that can be transformed to query plan
+	 */
+	public QueryTree getQueryTree(){
+		return queryTree;
+	}
+	
+	private String getColumn(){
+		return column;
+	}
+	
+	/**
+	 * visit AND expression. Simply call left expression and right expression.
+	 */
 	@Override
 	public void visit(AndExpression arg0) {	
 		Expression left = arg0.getLeftExpression();
@@ -32,17 +57,26 @@ public class QueryTreeVisitor implements ExpressionVisitor {
 		right.accept(v2);
 	}
 	
+	/**
+	 * visit Column and store its name.
+	 */
 	@Override
-	public void visit(Column arg0) {
-		String columnName = arg0.getColumnName(); 
+	public void visit(Column arg0) { 
 		String tableName = arg0.getTable().getName();
-		column = tableName+"."+columnName;
+		String tableAlias = arg0.getTable().getAlias();
+		column = tableName+"."+tableAlias;
 	}
 	
+	/**
+	 * visit LongValue. Do nothing.
+	 */
 	@Override
 	public void visit(LongValue arg0) {
 	}
 
+	/**
+	 * visit MinorThan. Push the expression into query tree.
+	 */
 	@Override
 	public void visit(MinorThan arg0) {
 		Expression left = arg0.getLeftExpression();
@@ -52,10 +86,13 @@ public class QueryTreeVisitor implements ExpressionVisitor {
 		left.accept(v1);
 		right.accept(v2);
 		String column1 = v1.getColumn();
-		String column2 = v1.getColumn();
+		String column2 = v2.getColumn();
 		queryTree.setExpression(arg0, column1, column2);
 	}
 
+	/**
+	 * visit MinorThanEquals. Push the expression into query tree.
+	 */
 	@Override
 	public void visit(MinorThanEquals arg0) {
 		Expression left = arg0.getLeftExpression();
@@ -65,10 +102,13 @@ public class QueryTreeVisitor implements ExpressionVisitor {
 		left.accept(v1);
 		right.accept(v2);
 		String column1 = v1.getColumn();
-		String column2 = v1.getColumn();
+		String column2 = v2.getColumn();
 		queryTree.setExpression(arg0, column1, column2);
 	}
 
+	/**
+	 * visit NotEqualsTo. Push the expression into query tree.
+	 */
 	@Override
 	public void visit(NotEqualsTo arg0) {
 		Expression left = arg0.getLeftExpression();
@@ -78,11 +118,14 @@ public class QueryTreeVisitor implements ExpressionVisitor {
 		left.accept(v1);
 		right.accept(v2);
 		String column1 = v1.getColumn();
-		String column2 = v1.getColumn();
+		String column2 = v2.getColumn();
 		queryTree.setExpression(arg0, column1, column2);
 
 	}
 	
+	/**
+	 * visit EqualsTo. Push the expression into query tree.
+	 */
 	@Override
 	public void visit(EqualsTo arg0) {
 		Expression left = arg0.getLeftExpression();
@@ -92,11 +135,10 @@ public class QueryTreeVisitor implements ExpressionVisitor {
 		left.accept(v1);
 		right.accept(v2);
 		String column1 = v1.getColumn();
-		String column2 = v1.getColumn();
+		String column2 = v2.getColumn();
 		queryTree.setExpression(arg0, column1, column2);
 	}
 	
-
 	@Override
 	public void visit(GreaterThan arg0) {
 		// TODO Auto-generated method stub

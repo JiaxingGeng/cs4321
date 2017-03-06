@@ -42,5 +42,15 @@ public class SelectOperator extends Operator {
 		sOp.reset();
 	}
 	
+	public ScanOperator getChild(){
+		return sOp;
+	}
+	
+	public String toString(){
+		String exp2;
+		if(exp==null) exp2 = "null";
+		else exp2 = exp.toString();
+		return "SelectOperator: " + exp2 + " ";
+	}
 
 }

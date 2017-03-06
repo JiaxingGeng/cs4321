@@ -1,7 +1,9 @@
-Sailors A B C
-Reserves G H
+Sailors A G C
+Reserves E B
 
 SingleEntry
 Table A B C
 
-Boats D E F
+Boats A C D
+
+Date A B F

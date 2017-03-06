@@ -25,14 +25,14 @@ public class JoinOperator extends Operator {
 		leftOp = op1;
 		rightOp= op2;
 		this.expression = expression;	
-		leftTuple = leftOp.getNextTuple();
 		String[] columns1 = op1.getColumns();
 		String[] columns2 = op2.getColumns();		
 		super.columns = new String[columns1.length + columns2.length];
 		   System.arraycopy(columns1, 0, super.columns, 0, columns1.length);
 		   System.arraycopy(columns2, 0, 
 				   super.columns, columns1.length, columns2.length);
-		columnsHash = this.getColumnsHash();	
+		columnsHash = this.getColumnsHash();
+		leftTuple = leftOp.getNextTuple();
 	}
 
 	public Tuple getNextTuple() throws IOException{
@@ -56,10 +56,23 @@ public class JoinOperator extends Operator {
 		}
 	}
 
-
 	public void reset() throws IOException{
 		leftOp.reset();
 		rightOp.reset();
 	}
-
+	
+	public Operator getLeftChild(){
+		return leftOp;
+	}
+	
+	public Operator getRightChild(){
+		return rightOp;
+	}
+	
+	public String toString(){
+		String exp;
+		if(expression==null) exp = "null";
+		else exp = expression.toString();
+		return "JoinOperator: " + exp + " ";
+	}
 }

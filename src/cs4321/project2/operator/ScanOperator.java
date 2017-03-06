@@ -64,4 +64,7 @@ public class ScanOperator extends Operator{
 		}		
 	}
 	
+	public String toString(){
+		return "ScanOperator:" + dataPath;
+	}	
 }
