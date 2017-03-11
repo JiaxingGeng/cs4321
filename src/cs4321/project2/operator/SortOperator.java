@@ -30,7 +30,8 @@ public class SortOperator extends Operator {
 			//column.setTable(null); // might need to change
 			String columnName = column.getColumnName(); 
 			String tableName = column.getTable().getName();
-			if (column.getTable().getAlias() != null) tableName = column.getTable().getAlias();
+			String alias = column.getTable().getAlias();
+			if (alias != null) tableName = alias;
 			//System.out.println("tableName is: " + tableName);
 			//System.out.println(colToIndexHash.get(tableName+"."+columnName));
 			pos.add(colToIndexHash.get(tableName+"."+columnName));

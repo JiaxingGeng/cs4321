@@ -137,6 +137,8 @@ public class ExpressionDeParser implements ExpressionVisitor,ItemsListVisitor{
 	public void visit(Column arg0) {
 		String columnName = arg0.getColumnName(); 
 		String tableName = arg0.getTable().getName();
+		String alias = arg0.getTable().getAlias();
+		if (alias != null) tableName = alias;
 		int pos = colToIndexHash.get(tableName+"."+columnName);
 	    result = tupleUnderTest.getAttributes()[pos];
 	}

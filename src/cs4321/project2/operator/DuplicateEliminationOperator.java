@@ -9,7 +9,8 @@ public class DuplicateEliminationOperator extends Operator {
 	
 	public DuplicateEliminationOperator(SortOperator sortOperator) 
 			throws IOException{
-		super.columns = null;
+		//super.columns = null;
+		super.columns = sortOperator.getColumns();
 		child = sortOperator;	
 		lastTuple = child.getNextTuple();
 	}

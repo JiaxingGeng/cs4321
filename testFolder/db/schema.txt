@@ -6,6 +6,10 @@ SortTestTable2 A B C
 DuplicateTestTable0 A B C
 DuplicateTestTable1 A B C
 DuplicateTestTable2 A B C
+JoinTestLeftTable0 A B C
+JoinTestLeftTable1 A B C
+JoinTestRightTable0 A B C
+JoinTestRightTable1 A B C
 
 SingleEntry
 Table A B C
