@@ -18,7 +18,7 @@ public class DuplicateEliminationOperator extends Operator {
 	public Tuple getNextTuple() throws IOException {
 		if (lastTuple == null) return null;
 		Tuple t = child.getNextTuple();
-		if (t==null) return lastTuple;
+		//if (t == null) return lastTuple;
 		if(lastTuple.equals(t)) return this.getNextTuple();
 		else {
 			Tuple temp = lastTuple;

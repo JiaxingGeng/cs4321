@@ -1,0 +1,1 @@
+SELECT * FROM Boats B, Sailors S WHERE B.D = S.A;

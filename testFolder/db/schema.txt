@@ -3,6 +3,9 @@ Reserves E B
 SortTestTable0 A B C
 SortTestTable1 A B C
 SortTestTable2 A B C
+DuplicateTestTable0 A B C
+DuplicateTestTable1 A B C
+DuplicateTestTable2 A B C
 
 SingleEntry
 Table A B C
