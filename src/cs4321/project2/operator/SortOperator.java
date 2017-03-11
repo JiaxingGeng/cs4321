@@ -15,15 +15,17 @@ public class SortOperator extends Operator {
 	private HashMap<String,Integer> colToIndexHash;
 	private LinkedList<String[]> bufferList;
 	private Operator child;
+	private Integer currOutputIndex;
 	
-	public SortOperator(Operator c, List<Column> orderByElements) throws IOException{
+	public SortOperator(Operator c, List<?> orderByElements) throws IOException{
 		child = c;
 		super.columns = c.getColumns();
 		colToIndexHash = this.getColumnsHash();
+		currOutputIndex = 0;
 		
 		LinkedList<Integer> pos = new LinkedList<>();
 		for (int i=0;i<orderByElements.size();i++){
-			Column column = orderByElements.get(i);
+			Column column = (Column) orderByElements.get(i);
 			//column.setColumnName((String) orderByElements.get(i));
 			//column.setTable(null); // might need to change
 			String columnName = column.getColumnName(); 
@@ -82,14 +84,17 @@ public class SortOperator extends Operator {
 	
 	@Override
 	public Tuple getNextTuple() throws IOException {
-		if(bufferList.isEmpty()) return null;
+		if (currOutputIndex < bufferList.size()) return new Tuple(bufferList.get(currOutputIndex++));
+		else return null;
+		//if(bufferList.isEmpty()) return null;
 		//System.out.println("pop: " + Arrays.toString(bufferList.peek()));
-		return new Tuple(bufferList.pop());
+		//return new Tuple(bufferList.pop());
 	}
 
 	@Override
 	public void reset() throws IOException {
-		child.reset();
+		currOutputIndex = 0;
+		//child.reset();
 	}
 
 }

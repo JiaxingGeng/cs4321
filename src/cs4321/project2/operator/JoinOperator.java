@@ -20,7 +20,7 @@ public class JoinOperator extends Operator {
 	HashMap<String, Integer> columnsHash;
 
 
-	public JoinOperator(Operator op1, Operator op2,Expression expression)
+	public JoinOperator(Operator op1, Operator op2, Expression expression)
 			throws IOException{
 		leftOp = op1;
 		rightOp= op2;

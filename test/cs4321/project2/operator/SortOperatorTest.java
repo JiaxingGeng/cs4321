@@ -87,6 +87,14 @@ public class SortOperatorTest {
 		SortOperator sto = new SortOperator(so, orderByElements);
 		sto.getNextTuple().print();
 		sto.getNextTuple().print();
+		sto.getNextTuple().print();
+		sto.getNextTuple().print();
+		sto.getNextTuple().print();
+		sto.reset();
+		System.out.println("Reset");
+		sto.getNextTuple().print();
+		sto.getNextTuple().print();
+		sto.getNextTuple().print();
 		sto.reset();
 		System.out.println("Reset");
 		sto.getNextTuple().print();

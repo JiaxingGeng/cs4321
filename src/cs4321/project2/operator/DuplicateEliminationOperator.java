@@ -30,6 +30,7 @@ public class DuplicateEliminationOperator extends Operator {
 	@Override
 	public void reset() throws IOException {
 		child.reset();
+		lastTuple = child.getNextTuple();
 	}
 
 }

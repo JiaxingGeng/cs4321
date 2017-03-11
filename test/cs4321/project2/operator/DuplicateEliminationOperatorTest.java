@@ -88,7 +88,15 @@ public class DuplicateEliminationOperatorTest {
 		DuplicateEliminationOperator deo = new DuplicateEliminationOperator(sto);
 		deo.getNextTuple().print();
 		deo.getNextTuple().print();
-		deo.reset(); // Should not bring any difference
+		deo.getNextTuple().print();
+		deo.getNextTuple().print();
+		deo.getNextTuple().print();
+		deo.reset();
+		System.out.println("Reset");
+		deo.getNextTuple().print();
+		deo.getNextTuple().print();
+		deo.getNextTuple().print();
+		deo.reset();
 		System.out.println("Reset");
 		deo.getNextTuple().print();
 		deo.getNextTuple().print();
