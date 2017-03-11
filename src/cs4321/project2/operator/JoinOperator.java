@@ -41,6 +41,8 @@ public class JoinOperator extends Operator {
 		if (rightTuple==null) {
 			rightOp.reset();
 			rightTuple = rightOp.getNextTuple();
+			leftTuple = leftOp.getNextTuple();
+			if (leftTuple == null) return null;
 		}
 		Tuple joinTuple = leftTuple.joins(rightTuple);
 		if (expression == null){

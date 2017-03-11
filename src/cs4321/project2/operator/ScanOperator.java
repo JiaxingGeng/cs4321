@@ -3,6 +3,8 @@ package cs4321.project2.operator;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
+
 import net.sf.jsqlparser.statement.select.FromItem;
 import cs4321.project2.*;
 import cs4321.project2.deparser.*;
@@ -27,7 +29,9 @@ public class ScanOperator extends Operator{
 	    String tableName = tableTuple[0];
 		Catalog cat = Catalog.getInstance(null);
 		String[] attributes = cat.getAttributes(tableName);
+		//System.out.println("attributes are: " + Arrays.toString(attributes));
 		numColumns = attributes.length;
+		//System.out.println("numColumns: " + numColumns);
 		String[] columns = new String[numColumns];
 		for (int i=0;i<numColumns;i++){
 			if (!tableTuple[1].equals("null"))
@@ -41,12 +45,14 @@ public class ScanOperator extends Operator{
 	
 	public Tuple getNextTuple() throws IOException{
 		String currentLine = bf.readLine();
+		//System.out.println(currentLine);
 		if (currentLine == null) {
 			bf.close();
 			return null;
 		}
 		else {
 			Tuple tp = new Tuple(currentLine.split(","));
+			//System.out.println(tp.getColumns());
 			if (tp.getColumns() == numColumns) {
 				return tp;
 			}

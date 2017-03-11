@@ -1,5 +1,8 @@
-Sailors A G C
+Sailors A G C B
 Reserves E B
+SortTestTable0 A B C
+SortTestTable1 A B C
+SortTestTable2 A B C
 
 SingleEntry
 Table A B C
@@ -7,3 +10,4 @@ Table A B C
 Boats A C D
 
 Date A B F
+

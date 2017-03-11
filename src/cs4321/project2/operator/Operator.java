@@ -1,6 +1,7 @@
 package cs4321.project2.operator;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -42,6 +43,7 @@ public abstract class Operator {
 	}
 	
 	public HashMap<String, Integer> getColumnsHash(){
+		//System.out.println("columns are: " + Arrays.toString(columns));
 		HashMap<String, Integer> hashMap = new HashMap<>();
 		for(int i=0;i<columns.length;i++) hashMap.put(columns[i], i);
 		return hashMap;

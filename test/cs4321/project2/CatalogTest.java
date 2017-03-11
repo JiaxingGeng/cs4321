@@ -34,7 +34,7 @@ public class CatalogTest {
 		assertEquals("Sailors",tables.get(0));
 		assertEquals("Reserves",tables.get(1));
 		assertEquals("Table",tables.get(2));
-		assertEquals(4,tables.size());}
+		assertEquals(5,tables.size());}
 		catch (IOException e) {e.printStackTrace();fail();}
 
 		// test whether the catalog will be changed for a different dir
@@ -43,7 +43,7 @@ public class CatalogTest {
 		assertEquals("Sailors",tables.get(0));
 		assertEquals("Reserves",tables.get(1));
 		assertEquals("Table",tables.get(2));
-		assertEquals(4,tables.size());}
+		assertEquals(5,tables.size());}
 		catch (IOException e) {e.printStackTrace();fail();}
 
 	}

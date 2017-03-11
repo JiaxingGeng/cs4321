@@ -25,6 +25,7 @@ public class Tuple {
 	}
 	
 	public void print(){
+		//System.out.println("the number of elements in this tuple: " + num);
 		for (String s: attributes) System.out.print(s + ", ");
 		System.out.println("");
 	}
