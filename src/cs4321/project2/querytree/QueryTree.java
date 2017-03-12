@@ -156,6 +156,10 @@ public class QueryTree {
 	private JoinNode findJoinNode(Node n, String column1, String column2){
 		JoinNode joinNode = (JoinNode) n;
 		String tableName = joinNode.getRight().getTableName();
+		String[] tableTuple = tableName.split("\\.");
+		if (tableTuple[1].equals("null")) tableName = tableTuple[0];
+		else tableName = tableTuple[1];
+		
 		if( column1.equals(tableName) || column2.equals(tableName))
 			return joinNode;
 		else if (joinNode.getLeft() instanceof Leaf) return null; 
@@ -165,10 +169,17 @@ public class QueryTree {
 	private Leaf findLeaf(Node n,String column){
 		JoinNode joinNode = (JoinNode) n;
 		String tableName = joinNode.getRight().getTableName();
+		String[] tableTuple = tableName.split("\\.");
+		if (tableTuple[1].equals("null")) tableName = tableTuple[0];
+		else tableName = tableTuple[1];
 		if( column.equals(tableName)) return joinNode.getRight();
 		else if (joinNode.getLeft() instanceof Leaf) {
 			Leaf leaf = (Leaf) joinNode.getLeft();
-			if (column.equals(leaf.getTableName())) return leaf;
+			tableName = leaf.getTableName();
+			tableTuple = tableName.split("\\.");
+			if (tableTuple[1].equals("null")) tableName = tableTuple[0];
+			else tableName = tableTuple[1];
+			if (column.equals(tableName)) return leaf;
 			else return null;
 		}
 		else return findLeaf(joinNode.getLeft(), column);

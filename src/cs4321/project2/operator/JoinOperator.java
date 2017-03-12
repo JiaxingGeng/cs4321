@@ -3,7 +3,6 @@ package cs4321.project2.operator;
 import net.sf.jsqlparser.expression.Expression;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import cs4321.project2.deparser.*;
 
@@ -27,7 +26,6 @@ public class JoinOperator extends Operator {
 		rightOp= op2;
 		this.expression = expression;	
 		String[] columns1 = op1.getColumns();
-		//System.out.println("columns1 is: " + Arrays.toString(columns1));
 		String[] columns2 = op2.getColumns();		
 		super.columns = new String[columns1.length + columns2.length];
 		   System.arraycopy(columns1, 0, super.columns, 0, columns1.length);

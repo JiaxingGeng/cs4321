@@ -3,7 +3,6 @@ package cs4321.project2.operator;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 import net.sf.jsqlparser.statement.select.FromItem;
 import cs4321.project2.*;
@@ -23,7 +22,7 @@ public class ScanOperator extends Operator{
 	private int numColumns;
 	
 	public ScanOperator(FromItem fromItem) throws IOException{
-	    SelectDeParser selectVisitor = new SelectDeParser();
+		SelectDeParser selectVisitor = new SelectDeParser();
 	    fromItem.accept(selectVisitor);
 	    String[] tableTuple = selectVisitor.getResult().split("\\.");
 	    String tableName = tableTuple[0];

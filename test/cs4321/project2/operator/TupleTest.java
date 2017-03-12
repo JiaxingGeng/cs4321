@@ -26,4 +26,12 @@ public class TupleTest {
 		joinTuple.print();
 	}
 
+	@Test 
+	public void testEquals(){
+		String[] attrs1 = {"a", "b", "c"};
+		Tuple tuple1 = new Tuple(attrs1);
+		String[] attrs2 = {"a", "b", "d"};
+		Tuple tuple2 = new Tuple(attrs2);
+		assertEquals(false,tuple1.equals(tuple2,null));
+	}
 }

@@ -1,7 +1,5 @@
 package cs4321.project2.operator;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

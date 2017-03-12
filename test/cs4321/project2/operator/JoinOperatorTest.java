@@ -1,7 +1,5 @@
 package cs4321.project2.operator;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +10,8 @@ import cs4321.project2.Catalog;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.statement.select.AllColumns;
+import net.sf.jsqlparser.statement.select.SelectItem;
 
 public class JoinOperatorTest {
 
@@ -60,7 +60,10 @@ public class JoinOperatorTest {
 		orderByElementsLeft.add(new Column(tl, "A"));
 		orderByElementsLeft.add(new Column(tl, "B"));
 		SortOperator stol = new SortOperator(sol, orderByElementsLeft);
-		DuplicateEliminationOperator deol = new DuplicateEliminationOperator(stol);
+		ArrayList<SelectItem> selectItems =  new ArrayList<SelectItem>();  
+		AllColumns allColumns = new AllColumns();
+		selectItems.add(allColumns);
+		DuplicateEliminationOperator deol = new DuplicateEliminationOperator(stol,selectItems);
 		
 		ScanOperator sor = new ScanOperator(tr);
 		List<Column> orderByElementsRight = new ArrayList<Column> ();
@@ -119,7 +122,10 @@ public class JoinOperatorTest {
 		orderByElementsLeft.add(new Column(tl, "A"));
 		orderByElementsLeft.add(new Column(tl, "B"));
 		SortOperator stol = new SortOperator(sol, orderByElementsLeft);
-		DuplicateEliminationOperator deol = new DuplicateEliminationOperator(stol);
+		ArrayList<SelectItem> selectItems =  new ArrayList<SelectItem>();  
+		AllColumns allColumns = new AllColumns();
+		selectItems.add(allColumns);
+		DuplicateEliminationOperator deol = new DuplicateEliminationOperator(stol,selectItems);
 		
 		ScanOperator sor = new ScanOperator(tr);
 		List<Column> orderByElementsRight = new ArrayList<Column> ();

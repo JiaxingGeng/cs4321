@@ -1,13 +1,12 @@
 package cs4321.project2;
 
 import java.io.FileReader;
+import java.io.PrintWriter;
 
-import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.schema.*;
 
 import cs4321.project2.operator.*;
 
@@ -36,20 +35,22 @@ public class Interpreter {
 			CCJSqlParser parser = 
 					new CCJSqlParser(new FileReader(inputdir+"/queries.sql"));
 			Statement statement;
+			int numQuery = 1;
 			while ((statement = parser.Statement()) != null) {
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
 				PlanGenerator queriesPlan = new PlanGenerator(plainSelect,inputdir);
 				Operator op = queriesPlan.getQueryPlan();
-				System.out.print("----- New Query: ");
-				System.out.println(plainSelect.toString() + " -----");				
-				op.dump();
+				String txtName = outputdir + "/query" + Integer.toString(numQuery);
+				numQuery++;
+				PrintWriter writer = new PrintWriter(txtName, "UTF-8");
+				op.dump(writer);
+				writer.close();
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
 		}
-
 	}
 
 }

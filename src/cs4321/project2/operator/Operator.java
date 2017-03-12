@@ -1,7 +1,7 @@
 package cs4321.project2.operator;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.io.PrintWriter;
 import java.util.HashMap;
 
 /**
@@ -38,6 +38,14 @@ public abstract class Operator {
 			this.dump();
 		}
 	}
+	public void dump(PrintWriter printWriter) throws IOException{
+		Tuple t = this.getNextTuple();
+		if (t != null){
+			t.print(printWriter);
+			this.dump(printWriter);
+		}
+	}
+		
 	public String[] getColumns(){
 		return columns;
 	}

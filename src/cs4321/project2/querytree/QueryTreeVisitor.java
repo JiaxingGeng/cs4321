@@ -63,8 +63,8 @@ public class QueryTreeVisitor implements ExpressionVisitor {
 	@Override
 	public void visit(Column arg0) { 
 		String tableName = arg0.getTable().getName();
-		String tableAlias = arg0.getTable().getAlias();
-		column = tableName+"."+tableAlias;
+//		String tableAlias = arg0.getTable().getAlias();
+		column = tableName;
 	}
 	
 	/**

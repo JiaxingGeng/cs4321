@@ -76,7 +76,7 @@ public class QueryTreeTest {
 		expression.setLeftExpression(new Column(t1,"A"));
 		expression.setRightExpression(new LongValue("10"));
 		System.out.println("Insert Expression:" + expression.toString());
-		querytree.setExpression(expression, "Boat.null", null);
+		querytree.setExpression(expression, "Boat", null);
 		System.out.println("---------------------------");
 		querytree.print(querytree.getQueryTree());
 		System.out.println("---------------------------");
@@ -84,7 +84,7 @@ public class QueryTreeTest {
 		expression.setLeftExpression(new Column(t3,"B"));
 		expression.setRightExpression(new LongValue("12"));
 		System.out.println("Insert Expression:" + expression.toString());
-		querytree.setExpression(expression, "Reserve.null", null);
+		querytree.setExpression(expression, "Reserve", null);
 		System.out.println("---------------------------");
 		querytree.print(querytree.getQueryTree());
 		System.out.println("---------------------------");
@@ -92,7 +92,7 @@ public class QueryTreeTest {
 		expression.setRightExpression(new Column(t1,"C"));
 		expression.setLeftExpression(new LongValue("10"));
 		System.out.println("Insert Expression:" + expression.toString());
-		querytree.setExpression(expression, "Boat.null", null);
+		querytree.setExpression(expression, "Boat", null);
 		System.out.println("---------------------------");
 		querytree.print(querytree.getQueryTree());
 		System.out.println("---------------------------");
@@ -102,7 +102,7 @@ public class QueryTreeTest {
 		expression.setLeftExpression(new Column(t1,"D"));
 		expression.setRightExpression(new Column(t3,"E"));
 		System.out.println("Insert Expression:" + expression.toString());
-		querytree.setExpression(expression, "Boat.null", "Reserve.null");
+		querytree.setExpression(expression, "Boat", "Reserve");
 		System.out.println("---------------------------");
 		querytree.print(querytree.getQueryTree());
 		System.out.println("---------------------------");
@@ -110,7 +110,7 @@ public class QueryTreeTest {
 		expression.setLeftExpression(new Column(t4,"F"));
 		expression.setRightExpression(new Column(t3,"G"));
 		System.out.println("Insert Expression:" + expression.toString());
-		querytree.setExpression(expression, "Reserve.null", "Date.null");
+		querytree.setExpression(expression, "Reserve", "Date");
 		System.out.println("---------------------------");
 		querytree.print(querytree.getQueryTree());
 		System.out.println("---------------------------");	
@@ -149,7 +149,7 @@ public class QueryTreeTest {
 			expression.setLeftExpression(new Column(t1,"A"));
 			expression.setRightExpression(new LongValue("10"));
 			System.out.println("Insert Expression:" + expression.toString());
-			querytree.setExpression(expression, "Boats.null", null);
+			querytree.setExpression(expression, "Boats", null);
 			System.out.println("---------------------------");
 			querytree.printQueryPlan(querytree.getQueryPlan());
 			System.out.println("---------------------------");		
@@ -157,7 +157,7 @@ public class QueryTreeTest {
 			expression.setLeftExpression(new Column(t3,"B"));
 			expression.setRightExpression(new LongValue("12"));
 			System.out.println("Insert Expression:" + expression.toString());
-			querytree.setExpression(expression, "Reserves.null", null);
+			querytree.setExpression(expression, "Reserves", null);
 			System.out.println("---------------------------");
 			querytree.printQueryPlan(querytree.getQueryPlan());
 			System.out.println("---------------------------");
@@ -165,7 +165,7 @@ public class QueryTreeTest {
 			expression.setRightExpression(new Column(t1,"C"));
 			expression.setLeftExpression(new LongValue("10"));
 			System.out.println("Insert Expression:" + expression.toString());
-			querytree.setExpression(expression, "Boats.null", null);
+			querytree.setExpression(expression, "Boats", null);
 			System.out.println("---------------------------");
 			querytree.printQueryPlan(querytree.getQueryPlan());
 			System.out.println("---------------------------");
@@ -175,7 +175,7 @@ public class QueryTreeTest {
 			expression.setLeftExpression(new Column(t1,"D"));
 			expression.setRightExpression(new Column(t3,"E"));
 			System.out.println("Insert Expression:" + expression.toString());
-			querytree.setExpression(expression, "Boats.null", "Reserves.null");
+			querytree.setExpression(expression, "Boats", "Reserves");
 			System.out.println("---------------------------");
 			querytree.printQueryPlan(querytree.getQueryPlan());
 			System.out.println("---------------------------");
@@ -183,7 +183,7 @@ public class QueryTreeTest {
 			expression.setLeftExpression(new Column(t4,"F"));
 			expression.setRightExpression(new Column(t2,"G"));
 			System.out.println("Insert Expression:" + expression.toString());
-			querytree.setExpression(expression, "Sailors.null", "Date.null");
+			querytree.setExpression(expression, "Sailors", "Date");
 			System.out.println("---------------------------");
 			querytree.printQueryPlan(querytree.getQueryPlan());
 			System.out.println("---------------------------");	
