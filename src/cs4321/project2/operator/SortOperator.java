@@ -14,22 +14,35 @@ import java.util.LinkedList;
 import java.util.Comparator;
 
 public class SortOperator extends Operator {
-	
+
 	private HashMap<String,Integer> colToIndexHash;
 	private LinkedList<String[]> bufferList;
 	private Integer currOutputIndex;
-	
+
 	public SortOperator(Operator c, List<?> orderByElements) throws IOException{
 		super.columns = c.getColumns();
 		colToIndexHash = this.getColumnsHash();
 		currOutputIndex = 0;
 		OnSelectItemVisitor visitor = new OnSelectItemVisitor(colToIndexHash);
-		LinkedList<Integer> pos = new LinkedList<>();		
+		LinkedList<Integer> pos = new LinkedList<>();
+		LinkedList<Integer> posTemp = new LinkedList<>();  // temporary storage
+		for (int j=0;j<columns.length;j++) posTemp.add(j);
 		if (orderByElements.get(0) instanceof SelectItem){
 			for (int i=0;i<orderByElements.size();i++){
 				SelectItem selectItem =(SelectItem) orderByElements.get(i);
 				selectItem.accept(visitor);
-				pos = (LinkedList<Integer>) visitor.getResult();				
+			}
+			pos = (LinkedList<Integer>) visitor.getResult();
+			if (pos == null){
+				pos = posTemp;
+			} else {
+				for (int j=0;j<pos.size();j++){
+					int index = pos.get(j);
+					posTemp.set(index,null);
+				}
+				for (int j=0;j<posTemp.size();j++){
+					if(posTemp.get(j)!=null) pos.add(posTemp.get(j));
+				}
 			}
 		} else {
 			for (int i=0;i<orderByElements.size();i++){
@@ -40,9 +53,12 @@ public class SortOperator extends Operator {
 				String alias = column.getTable().getAlias();
 				if (alias != null) tableName = alias;
 				pos.add(colToIndexHash.get(tableName+"."+columnName));
+				posTemp.set(colToIndexHash.get(tableName+"."+columnName),null);
+			}
+			for (int j=0;j<posTemp.size();j++){
+				if(posTemp.get(j)!=null) pos.add(posTemp.get(j));
 			}
 		}
-		
 		Tuple t;
 		bufferList = new LinkedList<>();
 		while((t=c.getNextTuple())!=null){			
@@ -51,14 +67,14 @@ public class SortOperator extends Operator {
 		CompareTuple comp = new CompareTuple(pos);	
 		Collections.sort(bufferList, comp);	
 	}
-		
+
 	private class CompareTuple implements Comparator<String[]>{
 		private LinkedList<Integer> pos;
-		
+
 		public CompareTuple(LinkedList<Integer> pos) {
 			this.pos = pos;
 		}
-		
+
 		public int compare(String[] s1, String[] s2){
 			for(int i=0; i<pos.size(); i++){
 				int num1 = Integer.parseInt(s1[pos.get(i)]);
@@ -69,7 +85,7 @@ public class SortOperator extends Operator {
 			return 0;
 		}		
 	}
-	
+
 	@Override
 	public Tuple getNextTuple() throws IOException {
 		if (currOutputIndex < bufferList.size()) 

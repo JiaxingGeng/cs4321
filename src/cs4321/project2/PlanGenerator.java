@@ -37,8 +37,10 @@ public class PlanGenerator {
 		} else {
 			QueryTree queryTree = new QueryTree(fromItem, fromJoins);
 			QueryTreeVisitor visitor = new QueryTreeVisitor(queryTree);
-			expression.accept(visitor);
-			queryTree = visitor.getQueryTree();
+			if (expression !=null){
+				expression.accept(visitor);
+				queryTree = visitor.getQueryTree();
+			}
 			op = queryTree.getQueryPlan();
 		}		
 		if (distinct != null){

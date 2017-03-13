@@ -1,5 +1,6 @@
 package cs4321.project2;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
@@ -33,19 +34,24 @@ public class Interpreter {
 			Catalog.getInstance(inputdir); // build catalog			
 			// parse the data
 			CCJSqlParser parser = 
-					new CCJSqlParser(new FileReader(inputdir+"/queries.sql"));
+					new CCJSqlParser(new FileReader(inputdir+File.separator+"queries.sql"));
 			Statement statement;
-			int numQuery = 1;
+			int numQuery = 0;
 			while ((statement = parser.Statement()) != null) {
+				numQuery++;
+				try{
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
 				PlanGenerator queriesPlan = new PlanGenerator(plainSelect,inputdir);
 				Operator op = queriesPlan.getQueryPlan();
-				String txtName = outputdir + "/query" + Integer.toString(numQuery);
-				numQuery++;
+				String txtName = outputdir + File.separator+"query" + Integer.toString(numQuery);
 				PrintWriter writer = new PrintWriter(txtName, "UTF-8");
 				op.dump(writer);
 				writer.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.err.println(e.getMessage());
+				}
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
