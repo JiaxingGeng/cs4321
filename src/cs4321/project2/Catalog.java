@@ -77,18 +77,24 @@ public class Catalog {
 		return catalogHash.get(table);
 	}
 	
+	// columnsHash is not used
+	// this function can be deleted after fixing selctOperator test
 	public void setColumnsHash(HashMap<String,Integer> columnsHash){
 		Catalog.columnsHash = columnsHash;
 	}
 
+	// columnsHash is not used
+	// this function can be deleted after fixing selctOperator test
 	public HashMap<String,Integer> getColumnsHash(){
 		return columnsHash;
 	}
-	
+	// columnsHash is not used
+	// this function can be deleted after fixing selctOperator test
 	public void addColumnsHash(String s, int col){
 		columnsHash.put(s,col);
 	}
-
+	// columnsHash is not used
+	// this function can be deleted after fixing selctOperator test
 	public void clearColumnsHash(){
 		columnsHash.clear();
 	}
