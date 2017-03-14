@@ -32,8 +32,10 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor{
 	
 	/**
 	 * Constructor an ExpressionDeParser using the following two parameters
-	 * @param tupleUnderTest, the tuple which has the expression that we want to evaluate
-	 * @param colToIndexHash, a hashmap that maps each of the column to its index
+	 * @param tupleUnderTest 
+	 * 			the tuple which has the expression that we want to evaluate
+	 * @param colToIndexHash 
+	 * 			a hashmap that maps each of the column to its index
 	 */
 	public ExpressionDeParser(Tuple tupleUnderTest, HashMap<String, Integer> colToIndexHash) {
 		this.tupleUnderTest = tupleUnderTest;

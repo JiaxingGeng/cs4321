@@ -1,11 +1,6 @@
 package cs4321.project2.operator;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 
 import cs4321.project2.Catalog;
@@ -14,7 +9,6 @@ import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.select.OrderByElement;
 
 public class SelectOperatorTest {
 

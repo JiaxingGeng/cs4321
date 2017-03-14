@@ -5,7 +5,7 @@ import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.schema.*;
 
 /**
- * A class to de-parse (that is, tranform from JSqlParser hierarchy 
+ * A class to de-parse (that is, transform from JSqlParser hierarchy 
  * into a string) a Select
  * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
  *
@@ -22,7 +22,8 @@ public class SelectDeParser implements SelectItemVisitor, FromItemVisitor {
 	
 	/**
 	 * A constructor for SelectDeParser
-	 * @param expressionVisitor, the expressionVistor is needed to evaluate SelectExpressionItem
+	 * @param expressionVisitor
+	 * 	 the expressionVistor is needed to evaluate SelectExpressionItem
 	 */
 	public SelectDeParser(ExpressionDeParser expressionVisitor){	
 		res = null;
@@ -30,8 +31,8 @@ public class SelectDeParser implements SelectItemVisitor, FromItemVisitor {
 	}
 	
 	/**
-	 * Return the result res
-	 * @return
+	 * Return the result 
+	 * @return  string parsed from select
 	 */
 	public String getResult(){
 		return res;

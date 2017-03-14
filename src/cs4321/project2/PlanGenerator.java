@@ -21,8 +21,8 @@ public class PlanGenerator {
 	
 	/**
 	 * Construct a tree of operators, and store the head node into field op.
-	 * @param plainSelect, a line of query
-	 * @param inputdir, the directory of database, and schema files.
+	 * @param plainSelect a line of query
+	 * @param inputdir the directory of database, and schema files.
 	 * @throws IOException
 	 */
 	public PlanGenerator(PlainSelect plainSelect, String inputdir) 

@@ -22,7 +22,8 @@ public class OnSelectItemVisitor implements SelectItemVisitor {
 	
 	/**
 	 * Constructor for the OnSelectItemVisitor
-	 * @param colToIndexHash, a hash map that maps each column to its positions
+	 * @param colToIndexHash
+	 * 		 a hash map that maps each column to its positions
 	 */
 	public OnSelectItemVisitor(HashMap<String, Integer> colToIndexHash){
 		this.colToIndexHash = colToIndexHash;
@@ -31,7 +32,7 @@ public class OnSelectItemVisitor implements SelectItemVisitor {
 	
 	/**
 	 * Return a list of positions
-	 * @return
+	 * @return position list
 	 */
 	public List<Integer> getResult(){
 		return posList;

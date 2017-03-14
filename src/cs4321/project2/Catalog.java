@@ -18,7 +18,6 @@ import java.io.IOException;
 public class Catalog {
 	
 	private static HashMap<String,String[]> catalogHash; 
-	private static HashMap<String,Integer> columnsHash;
 	private static LinkedList<String> tables;
 	private static Catalog instance;
 	private static String dir;
@@ -43,7 +42,6 @@ public class Catalog {
 			BufferedReader bf = new BufferedReader
 					(new FileReader(dir+"/db/schema.txt"));
 			catalogHash = new HashMap<>();
-			columnsHash = new HashMap<>();
 			tables = new LinkedList<>();
 			String currentLine;
 			while ((currentLine = bf.readLine()) != null ){
@@ -77,28 +75,10 @@ public class Catalog {
 		return catalogHash.get(table);
 	}
 	
-	// columnsHash is not used
-	// this function can be deleted after fixing selctOperator test
-	public void setColumnsHash(HashMap<String,Integer> columnsHash){
-		Catalog.columnsHash = columnsHash;
-	}
-
-	// columnsHash is not used
-	// this function can be deleted after fixing selctOperator test
-	public HashMap<String,Integer> getColumnsHash(){
-		return columnsHash;
-	}
-	// columnsHash is not used
-	// this function can be deleted after fixing selctOperator test
-	public void addColumnsHash(String s, int col){
-		columnsHash.put(s,col);
-	}
-	// columnsHash is not used
-	// this function can be deleted after fixing selctOperator test
-	public void clearColumnsHash(){
-		columnsHash.clear();
-	}
-	
+	/**
+	 * Get the input directory 
+	 * @return String represents input directory
+	 */
 	public String getInputDir(){
 		return dir;
 	}
