@@ -8,10 +8,10 @@ import cs4321.project2.deparser.*;
 
 
 /**
- * 
+ * ProjectOperator performs projections of the input tuples based on
+ * the selectItems. 
  * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
  */
-
 
 public class ProjectOperator extends Operator {
 	private Operator child;
@@ -25,7 +25,10 @@ public class ProjectOperator extends Operator {
 		super.columns = c.getColumns();
 		colToIndexHash = this.getColumnsHash();
 	}
-	
+	/**
+	 * Get the next tuple that is scanned from the file
+	 * @return Tuple after projection 
+	 */
 	public Tuple getNextTuple() throws IOException{
 		Tuple t = child.getNextTuple();
 		if (t == null) return null;
@@ -45,10 +48,11 @@ public class ProjectOperator extends Operator {
 		}
 		return new Tuple(projList.toArray(new String[projList.size()]));		
 	}
-	
+	/**
+	 * Reset the operator
+	 */
 	public void reset() throws IOException{
 		child.reset();
-	}
-	
+	}	
 
 }

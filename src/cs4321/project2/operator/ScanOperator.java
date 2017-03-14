@@ -9,7 +9,8 @@ import cs4321.project2.*;
 import cs4321.project2.deparser.*;
 
 /**
- * Scan the table from the file in the database
+ * Scan the table from the file in the database. It will always be the 
+ * leaf at a query plan and processed first. 
  * 
  * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
  */
@@ -28,10 +29,10 @@ public class ScanOperator extends Operator{
 	    String tableName = tableTuple[0];
 		Catalog cat = Catalog.getInstance(null);
 		String[] attributes = cat.getAttributes(tableName);
-		//System.out.println("attributes are: " + Arrays.toString(attributes));
 		numColumns = attributes.length;
-		//System.out.println("numColumns: " + numColumns);
 		String[] columns = new String[numColumns];
+		// storing column names in the operator such that they 
+		// can be tracked later
 		for (int i=0;i<numColumns;i++){
 			if (!tableTuple[1].equals("null"))
 				columns[i] = tableTuple[1] + "." + attributes[i];
@@ -41,17 +42,18 @@ public class ScanOperator extends Operator{
 		dataPath = cat.getInputDir() + "/db/data/" + tableName; 
 		bf = new BufferedReader(new FileReader(dataPath));
 	}
-	
+	/**
+	 * Get the next tuple that is scanned from the file
+	 * @return Tuple from scanning 
+	 */
 	public Tuple getNextTuple() throws IOException{
 		String currentLine = bf.readLine();
-		//System.out.println(currentLine);
 		if (currentLine == null) {
 			bf.close();
 			return null;
 		}
 		else {
 			Tuple tp = new Tuple(currentLine.split(","));
-			//System.out.println(tp.getColumns());
 			if (tp.getColumns() == numColumns) {
 				return tp;
 			}
@@ -59,16 +61,20 @@ public class ScanOperator extends Operator{
 			("each row should have same columns in the same database");
 		}
 	}
-	
+	/**
+	 * Reset the reader buffer so that it reads the tuples from the start
+	 */
 	public void reset() throws IOException{
-		if (bf == null)  // might need to change
+		if (bf == null)  
 			bf = new BufferedReader(new FileReader(dataPath));
 		else {
 			bf.close();
 			bf = new BufferedReader(new FileReader(dataPath));
 		}		
 	}
-	
+	/**
+	 * Print the operator type and its expression
+	 */
 	public String toString(){
 		return "ScanOperator:" + dataPath;
 	}	

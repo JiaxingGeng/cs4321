@@ -13,6 +13,10 @@ import java.util.HashMap;
 
 public abstract class Operator {
 	
+	// Columns is an array contains all the column names. These are 
+	// initialized in ScanOperator. If the table doesn't have alias,
+	// TableName.ColumnName will be stored. If it has alias, then
+	// AliasName.ColumnName will be stored.
 	protected String[] columns;
 	
 	/**
@@ -28,8 +32,8 @@ public abstract class Operator {
 	public abstract void reset() throws IOException;
 	
 	/**
-	 * Repeatedly get the next tuple until the end and write each tuple to 
-	 * a suitable PrintStream
+	 * Repeatedly get the next tuple until the end and print the tuple on 
+	 * the screen.
 	 */
 	public void dump() throws IOException{
 		Tuple t = this.getNextTuple();
@@ -38,6 +42,13 @@ public abstract class Operator {
 			this.dump();
 		}
 	}
+
+	/**
+	 * Repeatedly get the next tuple until the end and write the tuple to 
+	 * a file
+	 * @param printWriter the writer has opened an output file 
+	 * @throws IOException
+	 */
 	public void dump(PrintWriter printWriter) throws IOException{
 		Tuple t = this.getNextTuple();
 		if (t != null){
@@ -45,11 +56,20 @@ public abstract class Operator {
 			this.dump(printWriter);
 		}
 	}
-		
+	
+	/**
+	 * 	Get all the column names
+	 * @return The column names
+	 */
 	public String[] getColumns(){
 		return columns;
 	}
 	
+	/**
+	 * Hash to column names with its corresponding index. This allows 
+	 * the operators to quickly search for the position of a given column
+	 * @return the HashMap of the columns with its index
+	 */
 	public HashMap<String, Integer> getColumnsHash(){
 		//System.out.println("columns are: " + Arrays.toString(columns));
 		HashMap<String, Integer> hashMap = new HashMap<>();
