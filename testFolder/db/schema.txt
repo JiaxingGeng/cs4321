@@ -10,6 +10,7 @@ JoinTestLeftTable0 A B C
 JoinTestLeftTable1 A B C
 JoinTestRightTable0 A B C
 JoinTestRightTable1 A B C
+SelectTestTable0 A B C
 
 SingleEntry
 Table A B C
