@@ -13,12 +13,33 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Comparator;
 
+/**
+ * Sort Operator that sort the elements according to certain orders.
+ * It is used for operations ORDER BY and DISTINCT. The sorting order
+ * is always ascending. The tuple is first ordered by the attributes
+ * specified in ORDER BY and then ordered by the order they appeared 
+ * in the tuples. NOTE: our sort operator supports the ordering of
+ * columns that doensn't appear in the select item and we put sort 
+ * operator after projection operator for query plan generation.
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ *
+ */
 public class SortOperator extends Operator {
 
 	private HashMap<String,Integer> colToIndexHash;
-	private LinkedList<String[]> bufferList;
+	private LinkedList<String[]> bufferList; // list that stores the sorted result
 	private Integer currOutputIndex;
 
+	/**
+	 * Constructor for Sort Operator
+	 * @param c child operator
+	 * @param orderByElements 
+	 * 			there can be two possibilities: SelctItem list to support
+	 * distinct operation and OrderByElements list to support sort operation.
+	 * For distinct, the input should be the items in DISTINCT ON(..) or the
+	 * items after SELCT DISTINCT.(See PlanGernator for outside implementation)
+	 * @throws IOException
+	 */
 	public SortOperator(Operator c, List<?> orderByElements) throws IOException{
 		super.columns = c.getColumns();
 		colToIndexHash = this.getColumnsHash();
@@ -86,12 +107,19 @@ public class SortOperator extends Operator {
 		}		
 	}
 
+	/**
+	 * Get the next tuple from this operator 
+	 * 	 * @return Tuple after operation 
+	 */
 	@Override
 	public Tuple getNextTuple() throws IOException {
 		if (currOutputIndex < bufferList.size()) 
 			return new Tuple(bufferList.get(currOutputIndex++));
 		else return null;	}
 
+	/**
+	 * Reset the operator
+	 */
 	@Override
 	public void reset() throws IOException {
 		currOutputIndex = 0;
