@@ -39,6 +39,7 @@ public class Interpreter {
 			int numQuery = 0;
 			while ((statement = parser.Statement()) != null) {
 				numQuery++;
+				System.out.println("*********Query number " + Integer.toString(numQuery) + "*********");
 				try{
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();

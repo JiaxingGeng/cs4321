@@ -14,7 +14,7 @@ public class DuplicateEliminationOperator extends Operator {
 	private List<Integer> posList;
 
 	public DuplicateEliminationOperator
-	(SortOperator sortOperator,List<?> onSelectItems) 
+	(SortOperator sortOperator, List<?> onSelectItems) 
 			throws IOException{
 		super.columns = sortOperator.getColumns();
 		child = sortOperator;	
