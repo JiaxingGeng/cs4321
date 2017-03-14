@@ -10,20 +10,36 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.HashMap;
 
+/**
+ * An OnSelectItemVisitor that tells the positions of columns
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ *
+ */
 public class OnSelectItemVisitor implements SelectItemVisitor {
 	
 	private HashMap<String,Integer> colToIndexHash;
 	private List<Integer> posList;
 	
-	public OnSelectItemVisitor(HashMap<String,Integer> colToIndexHash){
+	/**
+	 * Constructor for the OnSelectItemVisitor
+	 * @param colToIndexHash, a hash map that maps each column to its positions
+	 */
+	public OnSelectItemVisitor(HashMap<String, Integer> colToIndexHash){
 		this.colToIndexHash = colToIndexHash;
 		posList = (List<Integer>) new LinkedList<Integer>();
 	}
 	
+	/**
+	 * Return a list of positions
+	 * @return
+	 */
 	public List<Integer> getResult(){
 		return posList;
 	}
 
+	/**
+	 * Return null if it's AllColumns (*)
+	 */
 	@Override
 	public void visit(AllColumns arg0) {
 		posList = null;
@@ -35,6 +51,9 @@ public class OnSelectItemVisitor implements SelectItemVisitor {
 
 	}
 
+	/**
+	 * Return the position of arg0
+	 */
 	@Override
 	public void visit(SelectExpressionItem arg0) {
 		Expression expression = arg0.getExpression();
@@ -43,9 +62,7 @@ public class OnSelectItemVisitor implements SelectItemVisitor {
 		String tableName = column.getTable().getName();
 		String alias = column.getTable().getAlias();
 		if (alias != null) tableName = alias;
-//		System.out.println(tableName+"."+columnName);
 		int pos = colToIndexHash.get(tableName+"."+columnName);
-//		System.out.println(pos);
 		posList.add(pos);
 	}
 

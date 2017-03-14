@@ -7,10 +7,9 @@ import java.util.HashMap;
 import cs4321.project2.deparser.*;
 
 /**
- * 
+ * A join operator takes in two operators, and join them if the tuples qualifies the expression
  * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
  */
-
 public class JoinOperator extends Operator {
 
 	private Operator leftOp;
@@ -19,7 +18,13 @@ public class JoinOperator extends Operator {
 	private Tuple leftTuple;
 	HashMap<String, Integer> columnsHash;
 
-
+	/**
+	 * Constructor for a JoinOperator
+	 * @param op1, the left operator
+	 * @param op2, the right operator
+	 * @param expression, the expression underwhich the two tuples from each operators will be joined
+	 * @throws IOException
+	 */
 	public JoinOperator(Operator op1, Operator op2, Expression expression)
 			throws IOException{
 		leftOp = op1;
@@ -35,6 +40,9 @@ public class JoinOperator extends Operator {
 		leftTuple = leftOp.getNextTuple();
 	}
 
+	/**
+	 * Return the next join tuple
+	 */
 	public Tuple getNextTuple() throws IOException{
 		if (leftTuple==null) return null;
 		Tuple rightTuple = rightOp.getNextTuple();
@@ -58,16 +66,27 @@ public class JoinOperator extends Operator {
 		}
 	}
 
+	/**
+	 * Reset, so that in the next call, getNextTuple will return the first tuple
+	 */
 	public void reset() throws IOException{
 		leftOp.reset();
 		rightOp.reset();
 		leftTuple = leftOp.getNextTuple();
 	}
 	
+	/**
+	 * Return the left operator
+	 * @return
+	 */
 	public Operator getLeftChild(){
 		return leftOp;
 	}
 	
+	/**
+	 * Return the right operator
+	 * @return
+	 */
 	public Operator getRightChild(){
 		return rightOp;
 	}
