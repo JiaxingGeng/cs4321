@@ -74,7 +74,7 @@ public class QueryTreeTest {
 		// test single insertion		
 		GreaterThan expression = new GreaterThan();
 		expression.setLeftExpression(new Column(t1,"A"));
-		expression.setRightExpression(new LongValue("10"));
+		expression.setRightExpression(new Column(t1,"B"));
 		System.out.println("Insert Expression:" + expression.toString());
 		querytree.setExpression(expression, "Boat", null);
 		System.out.println("---------------------------");

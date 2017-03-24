@@ -36,12 +36,12 @@ public class QueryTreeVisitorTest {
 			fromJoins.add(j2);
 			fromJoins.add(j3);
 			fromJoins.add(j4);
-			
+
 			// col < num
 			QueryTree querytree = new QueryTree(fromItem, fromJoins);
 			MinorThan expression = new MinorThan();
 			expression.setLeftExpression(new Column(t1,"A"));
-			expression.setRightExpression(new LongValue("10"));
+			expression.setRightExpression(new Column(t1,"C"));
 			System.out.println("Insert Expression:" + expression.toString());
 			QueryTreeVisitor visitor = new QueryTreeVisitor(querytree);
 			expression.accept(visitor);
@@ -49,7 +49,7 @@ public class QueryTreeVisitorTest {
 			System.out.println("---------------------------");
 			querytree.printQueryPlan(querytree.getQueryPlan());
 			System.out.println("---------------------------");
-			
+
 			// col1 < col2
 			querytree = new QueryTree(fromItem, fromJoins);
 			expression = new MinorThan();
@@ -62,7 +62,7 @@ public class QueryTreeVisitorTest {
 			System.out.println("---------------------------");
 			querytree.printQueryPlan(querytree.getQueryPlan());
 			System.out.println("---------------------------");
-			
+
 			// AND expression
 			querytree = new QueryTree(fromItem, fromJoins);
 			expression = new MinorThan();
@@ -81,7 +81,26 @@ public class QueryTreeVisitorTest {
 			System.out.println("---------------------------");
 			querytree.printQueryPlan(querytree.getQueryPlan());
 			System.out.println("---------------------------");
-			
+
+			// AND expression
+			querytree = new QueryTree(fromItem, fromJoins);
+			expression = new MinorThan();
+			expression.setLeftExpression(new Column(t1,"A"));
+			expression.setRightExpression(new Column(t1,"C"));
+			expression2 = new MinorThan();
+			expression2.setLeftExpression(new Column(t1,"A"));
+			expression2.setRightExpression(new LongValue("10"));
+			expression3 = new AndExpression();
+			expression3.setLeftExpression(expression);
+			expression3.setRightExpression(expression2);
+			System.out.println("Insert Expression:" + expression3.toString());
+			visitor = new QueryTreeVisitor(querytree);
+			expression3.accept(visitor);
+			querytree = visitor.getQueryTree();
+			System.out.println("---------------------------");
+			querytree.printQueryPlan(querytree.getQueryPlan());
+			System.out.println("---------------------------");
+
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -141,13 +141,29 @@ public class QueryTreeVisitor implements ExpressionVisitor {
 	
 	@Override
 	public void visit(GreaterThan arg0) {
-		// TODO Auto-generated method stub
+		Expression left = arg0.getLeftExpression();
+		Expression right = arg0.getRightExpression();
+		QueryTreeVisitor v1 = new QueryTreeVisitor();
+		QueryTreeVisitor v2 = new QueryTreeVisitor();
+		left.accept(v1);
+		right.accept(v2);
+		String column1 = v1.getColumn();
+		String column2 = v2.getColumn();
+		queryTree.setExpression(arg0, column1, column2);
 
 	}
 
 	@Override
 	public void visit(GreaterThanEquals arg0) {
-		// TODO Auto-generated method stub
+		Expression left = arg0.getLeftExpression();
+		Expression right = arg0.getRightExpression();
+		QueryTreeVisitor v1 = new QueryTreeVisitor();
+		QueryTreeVisitor v2 = new QueryTreeVisitor();
+		left.accept(v1);
+		right.accept(v2);
+		String column1 = v1.getColumn();
+		String column2 = v2.getColumn();
+		queryTree.setExpression(arg0, column1, column2);
 
 	}
 

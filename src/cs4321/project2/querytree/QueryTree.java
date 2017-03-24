@@ -68,6 +68,7 @@ public class QueryTree {
 		Node expressionNode;
 		if (column2 == null) expressionNode = findLeaf(queryTree,column1);
 		else if (column1 == null) expressionNode = findLeaf(queryTree,column2);
+		else if (column1.equals(column2)) expressionNode = findLeaf(queryTree,column1);
 		else expressionNode = findJoinNode(queryTree,column1,column2);
 		Expression expBefore = expressionNode.getExpression();
 		if (expBefore == null) expressionNode.setExpression(expression);
