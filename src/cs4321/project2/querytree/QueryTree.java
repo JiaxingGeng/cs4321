@@ -4,6 +4,7 @@ import java.util.Stack;
 import java.util.List;
 import cs4321.project2.deparser.SelectDeParser;
 import cs4321.project2.operator.*;
+import cs4321.project3.operator.logical.*;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.statement.select.FromItem;
@@ -86,6 +87,10 @@ public class QueryTree {
 	public Operator getQueryPlan() throws IOException{
 		return buildQueryPlan(queryTree);
 	}
+	
+	public LogicalOperator getLogicalPlan(){
+		return buildLogicalPlan(queryTree);
+	}
 
 	/**
 	 * print query tree
@@ -154,6 +159,32 @@ public class QueryTree {
 		}	
 	}
 
+	private LogicalOperator buildLogicalPlan(Node n) {
+		if (n instanceof Leaf){
+			Leaf leafNode = (Leaf) n;
+			Table table = new Table(null,leafNode.getTableName());
+			ScanLogicalOperator sOp = new ScanLogicalOperator(table);
+			Expression expression = leafNode.getExpression();
+			if (expression == null) return sOp;
+			else return new SelectLogicalOperator(expression,sOp);		
+		} else {
+			JoinNode joinNode = (JoinNode) n;
+			Leaf rightLeaf = joinNode.getRight();
+			Node leftnode = joinNode.getLeft();
+			LogicalOperator opRight;
+			LogicalOperator opLeft;
+
+			Table table = new Table(null,rightLeaf.getTableName());
+			ScanLogicalOperator sOp = new ScanLogicalOperator(table);
+			Expression expression = rightLeaf.getExpression();
+			Expression joinExpression = joinNode.getExpression();
+			if (expression == null) opRight=sOp;
+			else opRight = new SelectLogicalOperator(expression,sOp);
+			opLeft = buildLogicalPlan(leftnode);
+			return new JoinLogicalOperator(joinExpression,opLeft,opRight);						
+		}	
+	}
+	
 	private JoinNode findJoinNode(Node n, String column1, String column2){
 		JoinNode joinNode = (JoinNode) n;
 		String tableName = joinNode.getRight().getTableName();

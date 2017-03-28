@@ -17,8 +17,7 @@ public class SelectOperator extends Operator {
 	private HashMap<String, Integer> colToIndexHash;
 	private Expression exp;
 	
-	public SelectOperator(ScanOperator sOp, Expression exp) 
-			throws IOException {
+	public SelectOperator(ScanOperator sOp, Expression exp) {
 		this.exp = exp;
 		this.sOp = sOp;
 		super.columns = sOp.getColumns();

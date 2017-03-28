@@ -18,8 +18,7 @@ public class ProjectOperator extends Operator {
 	private List<?> selectItems;
 	private HashMap<String, Integer> colToIndexHash;
 	
-	public ProjectOperator(Operator c, List<?> selectItems) 
-			throws IOException{
+	public ProjectOperator(Operator c, List<?> selectItems){
 		child = c;
 		this.selectItems = selectItems;	
 		super.columns = c.getColumns();
