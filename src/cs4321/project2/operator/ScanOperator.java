@@ -1,13 +1,12 @@
 package cs4321.project2.operator;
 
-import java.io.FileReader;
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 
 import net.sf.jsqlparser.statement.select.FromItem;
 import cs4321.project2.*;
 import cs4321.project2.deparser.*;
-import cs4321.project3.IO.BinaryReader;
+import cs4321.project3.IO.*;
 
 /**
  * Scan the table from the file in the database. It will always be the 
@@ -19,7 +18,7 @@ import cs4321.project3.IO.BinaryReader;
 
 public class ScanOperator extends Operator{
 	
-	private BufferedReader bf;
+	private TupleReader bf;
 	private String dataPath;
 	private int numColumns;
 	
@@ -40,8 +39,9 @@ public class ScanOperator extends Operator{
 			else columns[i] = tableTuple[0] + "." + attributes[i];
 		}
 		super.columns = columns;
-		dataPath = cat.getInputDir() + "/db/data/" + tableName; 
-		bf = new BufferedReader(new FileReader(dataPath));
+		dataPath = 
+				cat.getInputDir() + File.separator+"db"+File.separator+"data" + File.separator+ tableName; 
+		bf = new BinaryReader(dataPath);
 	}
 	/**
 	 * Get the next tuple that is scanned from the file
@@ -67,11 +67,11 @@ public class ScanOperator extends Operator{
 	 */
 	public void reset() throws IOException{
 		if (bf == null)  
-			bf = new BufferedReader(new FileReader(dataPath));
+			bf = new BinaryReader(dataPath);
 		else {
 			bf.close();
-			bf = new BufferedReader(new FileReader(dataPath));
-		}		
+			bf = new BinaryReader(dataPath);
+		}	
 	}
 	/**
 	 * Print the operator type and its expression

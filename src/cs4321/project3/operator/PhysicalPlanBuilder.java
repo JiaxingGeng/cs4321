@@ -58,10 +58,11 @@ public class PhysicalPlanBuilder implements LogicalOperatorVisitor {
 
 	public void visit(SortLogicalOperator op){
 		List<?> orders = op.getOrderByELements();
+		List<?> items = op.getSelectItems();
 		PhysicalPlanBuilder visitor = new PhysicalPlanBuilder();
 		op.getChild().accept(visitor);
 		Operator operator = visitor.getPhysicalPlan();
-		try{topOp = new SortOperator(operator,orders);}
+		try{topOp = new SortOperator(operator,orders,items);}
 		catch(IOException e){System.out.println(e.getMessage());}
 	}
 

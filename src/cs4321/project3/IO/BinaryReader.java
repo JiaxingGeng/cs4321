@@ -57,18 +57,10 @@ public class BinaryReader implements TupleReader {
 	}
 
 	private int startNewBuffer() throws IOException {
+		buffer = ByteBuffer.allocate( 4096 ); 
 		int res = fc.read(buffer);
-		/*
-		int firstInt = buffer.getInt(0);
-		int secondInt = buffer.getInt(4);
-		System.out.println("first int:" + firstInt);
-		System.out.println("second int: " + secondInt);
-		*/
-		
 		remainingTuples = buffer.getInt(4);
-		//System.out.println("remaining tuples: " + remainingTuples);
 		numAttributes = buffer.getInt(0);
-		//System.out.println("numAttributes: " + numAttributes);
 		bufferPos = 8;  // position of first data entry
 		
 		return res;

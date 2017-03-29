@@ -53,7 +53,15 @@ public class BinaryWriter implements TupleWriter {
 	 */
 	@Override
 	public void close() throws IOException{
-		outputCurrentBuffer();
+		if(!firstBuffer) outputCurrentBuffer();	
+		else {  // no input: fill page with zeros
+			bufferPos = 0;
+			while(bufferPos < PAGE_SIZE){
+				buffer = ByteBuffer.allocate(PAGE_SIZE);
+				buffer.putInt(bufferPos, 0);
+				bufferPos +=4;
+			}		
+		}
 		fout.close();
 	}
 

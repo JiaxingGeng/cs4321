@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Arrays;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -40,7 +41,7 @@ public class Catalog {
 			Catalog.dir = dir;
 			instance = new Catalog();
 			BufferedReader bf = new BufferedReader
-					(new FileReader(dir+"/db/schema.txt"));
+					(new FileReader(dir+File.separator+"db"+File.separator+"schema.txt"));
 			catalogHash = new HashMap<>();
 			tables = new LinkedList<>();
 			String currentLine;

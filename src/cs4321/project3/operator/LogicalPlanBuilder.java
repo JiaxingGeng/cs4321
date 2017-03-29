@@ -43,11 +43,11 @@ public class LogicalPlanBuilder {
 			List<?> onSelectItems = distinct.getOnSelectItems();
 			if (onSelectItems == null) 
 				distinct.setOnSelectItems(selectItems);
-			LogicalOperator sOp = new SortLogicalOperator(selectItems,op);
+			LogicalOperator sOp = new SortLogicalOperator(selectItems,null,op);
 			op = new DuplicateEliminationLogicalOperator(distinct,sOp);
 		}
 		if (orderByElements != null){
-			op = new SortLogicalOperator(orderByElements,op);
+			op = new SortLogicalOperator(selectItems,orderByElements,op);
 		}	
 		op = new ProjectLogicalOperator(selectItems,op);
 	}

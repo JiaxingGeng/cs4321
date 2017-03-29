@@ -20,7 +20,7 @@ public class ExternalSortOperator {
 		String tableName = parts[parts.length - 1];
 		Table t = new Table(null, tableName);
 		ScanBinOperator sbo = new ScanBinOperator(t);
-		sto = new SortOperator(sbo, orderByElements);
+//		sto = new SortOperator(sbo, orderByElements);
 	}
 	
 	public void dump() throws IOException {

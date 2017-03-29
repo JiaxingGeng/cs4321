@@ -1,8 +1,9 @@
 package cs4321.project2.operator;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
+
+import cs4321.project3.IO.*;
 
 /**
  * Abstract class for all relational operators. The implementation is based on 
@@ -49,11 +50,11 @@ public abstract class Operator {
 	 * @param printWriter the writer has opened an output file 
 	 * @throws IOException
 	 */
-	public void dump(PrintWriter printWriter) throws IOException{
+	public void dump(TupleWriter tupleWriter) throws IOException{
 		Tuple t = this.getNextTuple();
-		if (t != null){
-			t.print(printWriter);
-			this.dump(printWriter);
+		while (t != null){
+			tupleWriter.write(t);
+			t = this.getNextTuple();
 		}
 	}
 	

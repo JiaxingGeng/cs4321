@@ -40,32 +40,15 @@ public class SortOperator extends Operator {
 	 * items after SELCT DISTINCT.(See PlanGernator for outside implementation)
 	 * @throws IOException
 	 */
-	public SortOperator(Operator c, List<?> orderByElements) throws IOException{
+	public SortOperator(Operator c, List<?> orderByElements, List<?> selectItems) throws IOException{
 		super.columns = c.getColumns();
 		colToIndexHash = this.getColumnsHash();
 		currOutputIndex = 0;
 		OnSelectItemVisitor visitor = new OnSelectItemVisitor(colToIndexHash);
 		LinkedList<Integer> pos = new LinkedList<>();
 		LinkedList<Integer> posTemp = new LinkedList<>();  // temporary storage
-		for (int j=0;j<columns.length;j++) posTemp.add(j);
-		if (orderByElements.get(0) instanceof SelectItem){
-			for (int i=0;i<orderByElements.size();i++){
-				SelectItem selectItem =(SelectItem) orderByElements.get(i);
-				selectItem.accept(visitor);
-			}
-			pos = (LinkedList<Integer>) visitor.getResult();
-			if (pos == null){
-				pos = posTemp;
-			} else {
-				for (int j=0;j<pos.size();j++){
-					int index = pos.get(j);
-					posTemp.set(index,null);
-				}
-				for (int j=0;j<posTemp.size();j++){
-					if(posTemp.get(j)!=null) pos.add(posTemp.get(j));
-				}
-			}
-		} else {
+		for (int j=0;j<columns.length;j++) posTemp.add(j);	
+		if (orderByElements!=null){
 			for (int i=0;i<orderByElements.size();i++){
 				OrderByElement oElement = (OrderByElement) orderByElements.get(i);
 				Column column = (Column) oElement.getExpression();
@@ -75,10 +58,24 @@ public class SortOperator extends Operator {
 				if (alias != null) tableName = alias;
 				pos.add(colToIndexHash.get(tableName+"."+columnName));
 				posTemp.set(colToIndexHash.get(tableName+"."+columnName),null);
+			}			
+		}
+		for (Object item:selectItems){
+			SelectItem selectItem =(SelectItem) item;
+			selectItem.accept(visitor);
+		}
+		LinkedList<Integer> pos2 = (LinkedList<Integer>) visitor.getResult();
+		if (pos2!=null){
+			for (int j=0;j<pos2.size();j++){
+				int index = pos2.get(j);
+				if (!pos.contains(index)){
+					pos.add(index);
+					posTemp.set(index, null);
+				}
 			}
-			for (int j=0;j<posTemp.size();j++){
-				if(posTemp.get(j)!=null) pos.add(posTemp.get(j));
-			}
+		}
+		for (int j=0;j<posTemp.size();j++){
+			if(posTemp.get(j)!=null) pos.add(posTemp.get(j));
 		}
 		Tuple t;
 		bufferList = new LinkedList<>();

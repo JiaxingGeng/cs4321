@@ -52,12 +52,12 @@ public class PlanGenerator {
 		}		
 		if (distinct != null){
 			List<?> onSelectItems = distinct.getOnSelectItems();
+			SortOperator sOp = new SortOperator(op, onSelectItems,selectItems);
 			if (onSelectItems == null) onSelectItems = selectItems;
-			SortOperator sOp = new SortOperator(op, onSelectItems);
 			op = new DuplicateEliminationOperator(sOp, onSelectItems);
 		}
 		if (orderByElements != null){
-			op = new SortOperator(op, orderByElements);
+			op = new SortOperator(op, orderByElements,selectItems);
 		}	
 		op = new ProjectOperator(op, selectItems);
 	}

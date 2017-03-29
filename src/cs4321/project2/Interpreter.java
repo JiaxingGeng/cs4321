@@ -2,7 +2,6 @@ package cs4321.project2;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.PrintWriter;
 
 import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.statement.Statement;
@@ -10,6 +9,9 @@ import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
 
 import cs4321.project2.operator.*;
+import cs4321.project3.IO.*;
+import cs4321.project3.operator.*;
+import cs4321.project3.operator.logical.*;
 
 /**
  * A simple interpreter for SQL statements. It takes in a database and a file 
@@ -43,10 +45,15 @@ public class Interpreter {
 				try{
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
-				PlanGenerator queriesPlan = new PlanGenerator(plainSelect,inputdir);
-				Operator op = queriesPlan.getQueryPlan();
+				LogicalPlanBuilder logicalPlan = new LogicalPlanBuilder(plainSelect,inputdir);
+				LogicalOperator logicalOp = logicalPlan.getLogicalPlan();
+				PhysicalPlanBuilder visitor = new PhysicalPlanBuilder();
+				logicalOp.accept(visitor);
+				Operator op = visitor.getPhysicalPlan();	
+//				PlanGenerator queriesPlan = new PlanGenerator(plainSelect,inputdir);
+//				Operator op = queriesPlan.getQueryPlan();
 				String txtName = outputdir + File.separator+"query" + Integer.toString(numQuery);
-				PrintWriter writer = new PrintWriter(txtName, "UTF-8");
+				TupleWriter writer = new BinaryWriter(txtName);
 				op.dump(writer);
 				writer.close();
 				} catch (Exception e) {

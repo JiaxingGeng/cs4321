@@ -9,26 +9,65 @@ import org.junit.Test;
 public class BinaryReaderTest {
 
 	@Test
-	public void testBinaryReader() throws IOException {
-		BinaryReader myReader = new BinaryReader("C:\\Users\\ronha_000\\OneDrive\\Spring\\CS 4321\\Samples_p3\\samples\\input\\db\\data\\Boats");
-		System.out.println(myReader.readLine());
-		System.out.println(myReader.readLine());
-		System.out.println(myReader.readLine());
+	public void testReadLine() throws IOException {
+		BinaryReader binReader = new BinaryReader("./input/db/data/Boats");
+		HumanReadableReader humanReader = 
+				new HumanReadableReader("./testFolder/db/data/Boats_humanreadable");
+		String currentLine = binReader.readLine();
+		while (currentLine !=null){
+			System.out.println(currentLine);
+			String compLine = humanReader.readLine();
+			assertEquals(true,currentLine.equals(compLine)); // compare all tuples
+			currentLine = binReader.readLine();
+		}
+		assertEquals(null,humanReader.readLine()); //read last line
+		
+		binReader = new BinaryReader("./testFolder/db/data/Sailors");
+		humanReader = 
+				new HumanReadableReader("./testFolder/db/data/Sailors_humanreadable");
+		currentLine = binReader.readLine();
+		while (currentLine !=null){
+			String compLine = humanReader.readLine();
+			assertEquals(true,currentLine.equals(compLine)); // compare all tuples
+			currentLine = binReader.readLine();
+		}
+		assertEquals(null,humanReader.readLine()); //read last line
+		
+		binReader = new BinaryReader("./testFolder/db/data/Reserves");
+		humanReader = 
+				new HumanReadableReader("./testFolder/db/data/Reserves_humanreadable");
+		currentLine = binReader.readLine();
+		while (currentLine !=null){
+			String compLine = humanReader.readLine();
+			assertEquals(true,currentLine.equals(compLine)); // compare all tuples
+			currentLine = binReader.readLine();
+		}
+		assertEquals(null,humanReader.readLine()); //read last line
 	}
-
+	
 	@Test
-	public void testReadLine() {
-		fail("Not yet implemented");
+	public void testReset()  throws IOException {
+		
+		BinaryReader binReader = new BinaryReader("./testFolder/db/data/Boats");
+		int i = 0;
+		// test reset in the first page
+		while (i<291){ 
+			i++;
+			binReader.readLine();
+		}
+		binReader.reset();
+		String currentLine = binReader.readLine();
+		assertEquals("12,143,196",currentLine);
+		
+		i=0;
+		while (i<400){   // on the second page
+			i++;
+			binReader.readLine();
+		}
+		binReader.reset();
+		currentLine = binReader.readLine();
+		assertEquals("12,143,196",currentLine);
 	}
 
-	@Test
-	public void testReset() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testClose() {
-		fail("Not yet implemented");
-	}
-
+	
 }
