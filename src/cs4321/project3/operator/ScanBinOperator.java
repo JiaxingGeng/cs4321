@@ -1,12 +1,12 @@
-package cs4321.project2.operator;
+package cs4321.project3.operator;
 
-import java.io.FileReader;
-import java.io.BufferedReader;
 import java.io.IOException;
 
 import net.sf.jsqlparser.statement.select.FromItem;
 import cs4321.project2.*;
 import cs4321.project2.deparser.*;
+import cs4321.project2.operator.Operator;
+import cs4321.project2.operator.Tuple;
 import cs4321.project3.IO.BinaryReader;
 
 /**
@@ -17,13 +17,13 @@ import cs4321.project3.IO.BinaryReader;
  */
 
 
-public class ScanOperator extends Operator{
+public class ScanBinOperator extends Operator{
 	
-	private BufferedReader bf;
+	private BinaryReader binReader;
 	private String dataPath;
 	private int numColumns;
 	
-	public ScanOperator(FromItem fromItem) throws IOException{
+	public ScanBinOperator(FromItem fromItem) throws IOException{
 		SelectDeParser selectVisitor = new SelectDeParser();
 	    fromItem.accept(selectVisitor);
 	    String[] tableTuple = selectVisitor.getResult().split("\\.");
@@ -41,16 +41,17 @@ public class ScanOperator extends Operator{
 		}
 		super.columns = columns;
 		dataPath = cat.getInputDir() + "/db/data/" + tableName; 
-		bf = new BufferedReader(new FileReader(dataPath));
+		binReader = new BinaryReader(dataPath);
 	}
+	
 	/**
 	 * Get the next tuple that is scanned from the file
 	 * @return Tuple from scanning 
 	 */
 	public Tuple getNextTuple() throws IOException{
-		String currentLine = bf.readLine();
+		String currentLine = binReader.readLine();
 		if (currentLine == null) {
-			bf.close();
+			binReader.close();
 			return null;
 		}
 		else {
@@ -62,21 +63,23 @@ public class ScanOperator extends Operator{
 			("each row should have same columns in the same database");
 		}
 	}
+	
 	/**
 	 * Reset the reader buffer so that it reads the tuples from the start
 	 */
 	public void reset() throws IOException{
-		if (bf == null)  
-			bf = new BufferedReader(new FileReader(dataPath));
+		if (binReader == null)  
+			binReader = new BinaryReader(dataPath);
 		else {
-			bf.close();
-			bf = new BufferedReader(new FileReader(dataPath));
+			binReader.close();
+			binReader = new BinaryReader(dataPath);
 		}		
 	}
+	
 	/**
 	 * Print the operator type and its expression
 	 */
 	public String toString(){
-		return "ScanOperator:" + dataPath;
+		return "ScanBinOperator:" + dataPath;
 	}	
 }

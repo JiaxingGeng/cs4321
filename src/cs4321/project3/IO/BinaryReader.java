@@ -35,11 +35,12 @@ public class BinaryReader implements TupleReader {
 		}
 		String tuple = "";
 		for (int i=0;i<numAttributes-1;i++){
-			int val = buffer.get(bufferPos);
+			int val = buffer.getInt(bufferPos);
 			tuple = tuple + val +",";
-			bufferPos +=4;
+			bufferPos += 4;
 		}
-		tuple = tuple +  buffer.get(bufferPos);
+		tuple = tuple +  buffer.getInt(bufferPos);
+		bufferPos += 4;
 		remainingTuples --;
 		return tuple;
 	}
@@ -57,9 +58,19 @@ public class BinaryReader implements TupleReader {
 
 	private int startNewBuffer() throws IOException {
 		int res = fc.read(buffer);
-		remainingTuples = buffer.get(0);
-		numAttributes = buffer.get(4);
+		/*
+		int firstInt = buffer.getInt(0);
+		int secondInt = buffer.getInt(4);
+		System.out.println("first int:" + firstInt);
+		System.out.println("second int: " + secondInt);
+		*/
+		
+		remainingTuples = buffer.getInt(4);
+		//System.out.println("remaining tuples: " + remainingTuples);
+		numAttributes = buffer.getInt(0);
+		//System.out.println("numAttributes: " + numAttributes);
 		bufferPos = 8;  // position of first data entry
+		
 		return res;
 	}
 	
