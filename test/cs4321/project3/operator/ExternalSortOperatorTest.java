@@ -25,9 +25,9 @@ public class ExternalSortOperatorTest {
 		OrderByElement orderByElement0 = new OrderByElement();
 		orderByElement0.setExpression(new Column(t, "A"));
 		orderByElements.add(orderByElement0);
-		//OrderByElement orderByElement1 = new OrderByElement();
-		//orderByElement1.setExpression(new Column(t, "C"));
-		//orderByElements.add(orderByElement1);
+		OrderByElement orderByElement1 = new OrderByElement();
+		orderByElement1.setExpression(new Column(t, "C"));
+		orderByElements.add(orderByElement1);
 		ExternalSortOperator eso = new ExternalSortOperator(datapath, orderByElements);
 		eso.dump();
 	}
