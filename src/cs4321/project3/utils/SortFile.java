@@ -43,7 +43,7 @@ public class SortFile {
 		
 		TupleWriter writer;
 		if (binaryOutputFile) writer = new BinaryWriter(dataPath+"_sorted");
-		else writer = new HumanReadableWriter(dataPath+"_sorted");
+		else writer = new HumanReadableWriter(dataPath+"_sorted_hm");
 		for (Tuple t:tuples)	writer.write(t);
 		writer.close();
 		

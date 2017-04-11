@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.FileInputStream;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
+import cs4321.project3.utils.*;
 
 
 public class BinaryWriterTest {
@@ -74,33 +75,90 @@ public class BinaryWriterTest {
 	@Test
 	public void testOutput() {
 
+
 		try{
-		for (int i=13;i<=15;i++){
-			String s = "query"+i;
-//			System.out.println(s);
-			// check every byte
-			FileInputStream fin1 = new FileInputStream("./output/"+s);
-			FileInputStream fin2 = new FileInputStream("./expected/"+s);
-			FileChannel fc1 = fin1.getChannel();
-			FileChannel fc2 = fin2.getChannel();
-			ByteBuffer buffer1 = ByteBuffer.allocate( 4096 ); 
-			ByteBuffer buffer2 = ByteBuffer.allocate( 4096 );
-			int res = fc1.read(buffer1);
-			while (res!=-1){
-				int res2 = fc2.read(buffer2); 
-				if (res2 ==-1) fail();  // not having the same page
-				for(int j=0;j<4096;j++){
-					byte b1 = buffer1.get(j);
-					byte b2 = buffer2.get(j);
-					assertEquals(b1,b2);
-				}
-				buffer1 = ByteBuffer.allocate( 4096 ); 
-				buffer2 = ByteBuffer.allocate( 4096 );
-				res = fc1.read(buffer1);
-			}		
-			fin1.close();
-			fin2.close();		
-		}} catch (Exception e){
+			for (int i=1;i<=12;i++){
+				String s = "query"+i;
+				SortFile sf = new SortFile("./output/"+s,true);
+				sf.sort(false);
+				sf.sort(true);
+//				sf = new SortFile("./expected/"+s,true);
+//				sf.sort(true);
+			} 
+		}
+		catch (Exception e){
+			fail();
+		}
+		
+		try{
+			for (int i=1;i<=12;i++){
+				String s = "query"+i+"_sorted";
+				//			System.out.println(s);
+				// check every byte
+				FileInputStream fin1 = new FileInputStream("./output/"+s);
+				FileInputStream fin2 = new FileInputStream("./expected/"+s);
+				FileChannel fc1 = fin1.getChannel();
+				FileChannel fc2 = fin2.getChannel();
+				ByteBuffer buffer1 = ByteBuffer.allocate( 4096 ); 
+				ByteBuffer buffer2 = ByteBuffer.allocate( 4096 );
+				int res = fc1.read(buffer1);
+				int block=0;
+				while (res!=-1){
+					int res2 = fc2.read(buffer2); 
+					if (res2 ==-1) fail();  // not having the same page
+					for(int j=0;j<4096;j++){
+						byte b1 = buffer1.get(j);
+						byte b2 = buffer2.get(j);
+						if(b1!=b2){
+						System.out.println(block);
+						System.out.println(j);}
+						assertEquals(b1,b2);
+					}
+					buffer1 = ByteBuffer.allocate( 4096 ); 
+					buffer2 = ByteBuffer.allocate( 4096 );
+					res = fc1.read(buffer1);
+					block++;
+				}		
+				fin1.close();
+				fin2.close();		
+			}
+		} catch (Exception e){
+			fail();
+		}
+		
+		try{
+			for (int i=13;i<=15;i++){
+				String s = "query"+i;
+				//			System.out.println(s);
+				// check every byte
+				FileInputStream fin1 = new FileInputStream("./output/"+s);
+				FileInputStream fin2 = new FileInputStream("./expected/"+s);
+				FileChannel fc1 = fin1.getChannel();
+				FileChannel fc2 = fin2.getChannel();
+				ByteBuffer buffer1 = ByteBuffer.allocate( 4096 ); 
+				ByteBuffer buffer2 = ByteBuffer.allocate( 4096 );
+				int res = fc1.read(buffer1);
+				int block=0;
+				while (res!=-1){
+					int res2 = fc2.read(buffer2); 
+					if (res2 ==-1) fail();  // not having the same page
+					for(int j=0;j<4096;j++){
+						byte b1 = buffer1.get(j);
+						byte b2 = buffer2.get(j);
+						if(b1!=b2){
+						System.out.println(block);
+						System.out.println(j);}
+						assertEquals(b1,b2);
+					}
+					buffer1 = ByteBuffer.allocate( 4096 ); 
+					buffer2 = ByteBuffer.allocate( 4096 );
+					res = fc1.read(buffer1);
+					block++;
+				}		
+				fin1.close();
+				fin2.close();		
+			}
+		} catch (Exception e){
 			fail();
 		}
 

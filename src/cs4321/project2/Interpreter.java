@@ -2,7 +2,8 @@ package cs4321.project2;
 
 import java.io.File;
 import java.io.FileReader;
-
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.PlainSelect;
@@ -57,7 +58,9 @@ public class Interpreter {
 				op.dump(writer);
 				writer.close();
 				} catch (Exception e) {
-					e.printStackTrace();
+					FileOutputStream fos = new FileOutputStream(new File("exception.txt"), true);  
+					PrintStream ps = new PrintStream(fos); 
+					e.printStackTrace(ps);
 					System.err.println(e.getMessage());
 				}
 			}			

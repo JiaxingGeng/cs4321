@@ -2,7 +2,7 @@ package cs4321.project3.operator.physical;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import cs4321.project2.deparser.ExpressionDeParser;
 import cs4321.project2.operator.*;
@@ -17,8 +17,10 @@ public class BNLJOperator extends Operator{
 	
 	private static final int PAZE_SIZE = 4096;
 	private int tuplesPerScan;
-	private LinkedList<Tuple> outerLoopTuples;
+	private ArrayList<Tuple> outerLoopTuples;
+	private int outerLoopPos;
 	private Tuple rightTuple;
+	private Tuple tempTuple;
 	private boolean lastBlock;
 
 	/**
@@ -40,7 +42,7 @@ public class BNLJOperator extends Operator{
 		   System.arraycopy(columns1, 0, super.columns, 0, columns1.length);
 		   System.arraycopy(columns2, 0, 
 				   super.columns, columns1.length, columns2.length);
-	    tuplesPerScan = bufferSize*(PAZE_SIZE - 8)/(4*columns.length);
+	    tuplesPerScan = bufferSize*((PAZE_SIZE - 8)/(4*columns1.length));
 		columnsHash = this.getColumnsHash();
 		rightTuple = rightOp.getNextTuple();
 		if (rightTuple!=null) outerLoopTuples = readBlocks();
@@ -50,18 +52,21 @@ public class BNLJOperator extends Operator{
 	 * Return the next join tuple
 	 */
 	public Tuple getNextTuple() throws IOException{
-		if (outerLoopTuples == null || outerLoopTuples.size()==0) 
-			return null;
-		Tuple leftTuple = outerLoopTuples.poll();
-		if (leftTuple == null){	
-			Tuple rightTuple = rightOp.getNextTuple();
+		if (outerLoopTuples == null) return null;
+		if (outerLoopPos >= outerLoopTuples.size()){	
+			rightTuple = rightOp.getNextTuple();
 			if (rightTuple==null) {
 				if (lastBlock) return null;
 				rightOp.reset();
 				outerLoopTuples = readBlocks();
 				return this.getNextTuple();
+			} else {
+				outerLoopPos = 0;
 			}
 		}
+
+		Tuple leftTuple = outerLoopTuples.get(outerLoopPos);
+		outerLoopPos ++;
 		Tuple joinTuple = leftTuple.joins(rightTuple);
 		if (expression == null){
 			return joinTuple;
@@ -107,15 +112,20 @@ public class BNLJOperator extends Operator{
 		return "BNLJOperator: " + exp + " ";
 	}
 	
-	private LinkedList<Tuple> readBlocks() throws IOException{
+	private ArrayList<Tuple> readBlocks() throws IOException{
 		int remainingTuples = tuplesPerScan;
-		LinkedList<Tuple> tupleList = new LinkedList<>();
+		ArrayList<Tuple> tupleList = new ArrayList<>();
+		if (tempTuple!=null) {
+			remainingTuples --;
+			tupleList.add(tempTuple);
+		}
 		Tuple leftTuple = leftOp.getNextTuple();
 		while (remainingTuples>0 && leftTuple!= null){
 			tupleList.add(leftTuple);
 			remainingTuples --;
 			leftTuple = leftOp.getNextTuple();
-		}	
+		}
+		if (leftTuple!=null) tempTuple = leftTuple;
 		if (remainingTuples>0) lastBlock = true;
 		return tupleList;
 	}
