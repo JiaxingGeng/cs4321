@@ -75,8 +75,9 @@ public class BinaryWriterTest {
 	public void testOutput() {
 
 		try{
-		for (int i=1;i<=15;i++){
+		for (int i=13;i<=15;i++){
 			String s = "query"+i;
+//			System.out.println(s);
 			// check every byte
 			FileInputStream fin1 = new FileInputStream("./output/"+s);
 			FileInputStream fin2 = new FileInputStream("./expected/"+s);

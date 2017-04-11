@@ -1,6 +1,7 @@
 package cs4321.project3.operator;
 
 import cs4321.project3.operator.logical.*;
+import cs4321.project3.operator.physical.*;
 import cs4321.project2.operator.*;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.expression.Expression;
@@ -52,7 +53,7 @@ public class PhysicalPlanBuilder implements LogicalOperatorVisitor {
 		op.getRightChild().accept(visitorRight);
 		Operator opLeft = visitorLeft.getPhysicalPlan();
 		Operator opRight = visitorRight.getPhysicalPlan();
-		try{topOp = new JoinOperator(opLeft,opRight,exp);}
+		try{topOp = new BNLJOperator(opLeft,opRight,exp,4);}
 		catch(IOException e){System.out.println(e.getMessage());}
 	}
 

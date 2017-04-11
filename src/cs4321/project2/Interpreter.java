@@ -27,9 +27,9 @@ public class Interpreter {
 	public static void main(String[] args) {
 		try{
 			// check input arguments
-			if (args == null || args.length != 2)
+			if (args == null || args.length != 3)
 				throw new IllegalArgumentException
-				("need two arguments: inputdir and outputdir");
+				("need three arguments: inputdir, outputdir and tempdir");
 			String inputdir = args[0];
 			String outputdir = args[1];
 						
