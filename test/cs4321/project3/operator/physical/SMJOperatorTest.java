@@ -30,7 +30,7 @@ public class SMJOperatorTest {
 	// SELECT FROM TestTable1 TestTable2 WHERE TestTable1.J = TestTable2.K
 	public void testSMJOperator() {
 		System.out.println("-----------------------");
-		System.out.println("| testSMJOperatorTest() |");
+		System.out.println("| testSMJOperator() |");
 		System.out.println("-----------------------");
 		Table tl = new Table(null,"Sailors");
 		tl.setAlias("S");

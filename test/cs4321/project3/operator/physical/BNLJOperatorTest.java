@@ -11,6 +11,7 @@ import cs4321.project3.utils.*;
 import cs4321.project3.IO.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.relational.*;
 
 public class BNLJOperatorTest {
@@ -45,6 +46,42 @@ public class BNLJOperatorTest {
 //		("output/query8", "output/query8_readable");
 //		
 		
+	}
+	
+	@Test
+	public void test2() throws IOException {
+		System.out.println("----------------------");
+		System.out.println("| testBNLJOperator() |");
+		System.out.println("----------------------");
+		Table tl = new Table(null,"Sailors");
+		tl.setAlias("S");
+		Table tr = new Table(null, "Reserves");
+		tr.setAlias("R");
+		Column leftExpCol1 = new Column(tl, "A");
+		Column rightExpCol1 = new Column(tr, "G");
+		EqualsTo equalsToExp1 = new EqualsTo();
+		equalsToExp1.setLeftExpression(leftExpCol1);
+		equalsToExp1.setRightExpression(rightExpCol1);
+		//equalsToExp1.accept(new SMJExpressionDeParser());
+		Column leftExpCol2 = new Column(tl, "B");
+		Column rightExpCol2 = new Column(tr, "H");
+		EqualsTo equalsToExp2 = new EqualsTo();
+		equalsToExp2.setLeftExpression(leftExpCol2);
+		equalsToExp2.setRightExpression(rightExpCol2);
+		//equalsToExp2.accept(new SMJExpressionDeParser());
+		AndExpression andExp = new AndExpression();
+		andExp.setLeftExpression(equalsToExp1);
+		andExp.setRightExpression(equalsToExp2);
+		//andExp.accept(new SMJExpressionDeParser());
+		try{ Catalog.getInstance("input");
+		ScanOperator sol = new ScanOperator(tl);
+		ScanOperator sor = new ScanOperator(tr);
+		BNLJOperator op = new BNLJOperator(sol, sor, andExp, 2);
+		//SMJOperator smjo = new SMJOperator(sol, sor, andExp);
+		//smjo.dump();
+		op.dump();
+		//jo.dump();
+		} catch (IOException e) {}
 	}
 
 }
