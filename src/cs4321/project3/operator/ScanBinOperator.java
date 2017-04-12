@@ -60,7 +60,7 @@ public class ScanBinOperator extends Operator{
 				return tp;
 			}
 			else throw new IOException
-			("each row should have same columns in the same database");
+			("each row should have the same columns in the same database");
 		}
 	}
 	

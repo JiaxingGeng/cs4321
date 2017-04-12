@@ -13,6 +13,8 @@ JoinTestLeftTable1 A B C
 JoinTestRightTable0 A B C
 JoinTestRightTable1 A B C
 SelectTestTable0 A B C
+SMJTestTable0 A B
+SMJTestTable1 A C D 
 
 SingleEntry
 Table A B C
@@ -21,4 +23,5 @@ Boats A C D
 Boats_bin A C D
 
 Date A B F
+
 

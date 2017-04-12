@@ -8,7 +8,7 @@ public class SelectLogicalOperator extends LogicalOperator {
 	private Expression expression;
 	private LogicalOperator op;
 	
-	public SelectLogicalOperator(Expression expression,LogicalOperator op){
+	public SelectLogicalOperator(Expression expression, LogicalOperator op){
 		this.expression = expression;
 		this.op = op;
 	}
