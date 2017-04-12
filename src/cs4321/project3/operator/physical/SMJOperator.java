@@ -12,6 +12,7 @@ import cs4321.project3.deparser.SMJExpressionDeParser;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.OrderByElement;
+import net.sf.jsqlparser.statement.select.SelectItem;
 
 public class SMJOperator extends Operator {
 	
@@ -60,8 +61,16 @@ public class SMJOperator extends Operator {
 			orderByElement.setExpression(orderByElementsInArray.get(1).get(i));
 			orderByElements2.add(orderByElement);
 		}
-		so1 = new SortOperator(op1, orderByElements1, null);
-		so2 = new SortOperator(op2, orderByElements2, null);
+		/*
+		for (int i = 0; i < orderByElements1.size(); i++) {
+			System.out.println(orderByElements1.get(i).toString());
+		}
+		for (int i = 0; i < orderByElements2.size(); i++) {
+			System.out.println(orderByElements2.get(i).toString());
+		}
+		*/
+		so1 = new SortOperator(op1, orderByElements1, new ArrayList<SelectItem> ());
+		so2 = new SortOperator(op2, orderByElements2, new ArrayList<SelectItem> ());
 		leftTuple = so1.getNextTuple();
 		rightTuple = so2.getNextTuple();
 		currRightIndex++;
@@ -70,10 +79,11 @@ public class SMJOperator extends Operator {
 		//String exp_string = expression.toString();
 		//System.out.println(exp_string);
 		
+		/*
 		so1.dump();
 		System.out.println("**************");
 		so2.dump();
-		
+		*/
 	}
 
 	@Override

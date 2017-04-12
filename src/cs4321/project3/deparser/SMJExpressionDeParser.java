@@ -288,8 +288,11 @@ public class SMJExpressionDeParser implements ExpressionVisitor, ItemsListVisito
 			eqlResultRight.add(cl);
 			eqlResultLeft.add(cr);
 		}
+		//eqlResult.set(0, eqlResultLeft);
+		//eqlResult.set(1, eqlResultRight);
+		eqlResult.add(eqlResultRight); // add will add from right to left.
 		eqlResult.add(eqlResultLeft);
-		eqlResult.add(eqlResultRight);
+		
 		result = eqlResult;
 
 	}

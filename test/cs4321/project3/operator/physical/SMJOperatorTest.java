@@ -32,18 +32,18 @@ public class SMJOperatorTest {
 		System.out.println("-----------------------");
 		System.out.println("| testSMJOperatorTest() |");
 		System.out.println("-----------------------");
-		Table tl = new Table(null,"SMJTestTable0");
-		tl.setAlias("SMJTT0");
-		Table tr = new Table(null, "SMJTestTable1");
-		tr.setAlias("SMJTT1");
+		Table tl = new Table(null,"Sailors");
+		tl.setAlias("S");
+		Table tr = new Table(null, "Reserves");
+		tr.setAlias("R");
 		Column leftExpCol1 = new Column(tl, "A");
-		Column rightExpCol1 = new Column(tr, "A");
+		Column rightExpCol1 = new Column(tr, "G");
 		EqualsTo equalsToExp1 = new EqualsTo();
 		equalsToExp1.setLeftExpression(leftExpCol1);
 		equalsToExp1.setRightExpression(rightExpCol1);
 		//equalsToExp1.accept(new SMJExpressionDeParser());
 		Column leftExpCol2 = new Column(tl, "B");
-		Column rightExpCol2 = new Column(tr, "C");
+		Column rightExpCol2 = new Column(tr, "H");
 		EqualsTo equalsToExp2 = new EqualsTo();
 		equalsToExp2.setLeftExpression(leftExpCol2);
 		equalsToExp2.setRightExpression(rightExpCol2);
@@ -52,10 +52,11 @@ public class SMJOperatorTest {
 		andExp.setLeftExpression(equalsToExp1);
 		andExp.setRightExpression(equalsToExp2);
 		//andExp.accept(new SMJExpressionDeParser());
-		try{ Catalog.getInstance("testFolder");
+		try{ Catalog.getInstance("input");
 		ScanOperator sol = new ScanOperator(tl);
 		ScanOperator sor = new ScanOperator(tr);
 		SMJOperator smjo = new SMJOperator(sol, sor, andExp);
+		smjo.dump();
 		//jo.dump();
 		} catch (IOException e) {}
 	}

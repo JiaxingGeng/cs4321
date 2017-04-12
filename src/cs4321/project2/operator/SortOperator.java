@@ -60,9 +60,13 @@ public class SortOperator extends Operator {
 				String alias = column.getTable().getAlias();
 				if (alias != null) tableName = alias;
 				pos.add(colToIndexHash.get(tableName+"."+columnName));
+				/*
 				System.out.println(tableName);
 				System.out.println(columnName);
 				System.out.println("setting: " + colToIndexHash.get(tableName+"."+columnName) + " to be null");
+				System.out.println("the hash has: ");
+				System.out.println(colToIndexHash.keySet());
+				*/
 				posTemp.set(colToIndexHash.get(tableName+"."+columnName),null);
 			}			
 		}
