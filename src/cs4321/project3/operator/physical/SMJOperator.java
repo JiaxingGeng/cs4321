@@ -22,8 +22,8 @@ public class SMJOperator extends Operator {
 	Operator op2;
 	Operator so1;
 	Operator so2;
-	Tuple leftTuple;
-	Tuple rightTuple;
+	private Tuple leftTuple;
+	private Tuple rightTuple;
 	boolean needToRevert;
 	int revertPoint;
 	int currRightIndex;
@@ -79,11 +79,17 @@ public class SMJOperator extends Operator {
 		//String exp_string = expression.toString();
 		//System.out.println(exp_string);
 		
-		/*
+		leftTuple.print();
 		so1.dump();
-		System.out.println("**************");
+		System.out.println("*******************************");
+		rightTuple.print();
 		so2.dump();
-		*/
+		System.out.println("*******************************");
+		so1.reset();
+		so1.getNextTuple();
+		so2.reset();
+		so2.getNextTuple();
+		
 	}
 
 	@Override
@@ -124,7 +130,7 @@ public class SMJOperator extends Operator {
 	
 	public Tuple resetRight(int index) throws IOException {
 		so2.reset();
-		Tuple tempTuple = new Tuple(null);
+		Tuple tempTuple = rightTuple;
 		for (int i = 0; i < index; i++) {
 			tempTuple = so2.getNextTuple();
 		}
@@ -140,13 +146,29 @@ public class SMJOperator extends Operator {
 	 * @return
 	 */
 	public int compare(Tuple tuple1, Tuple tuple2) {
+		//tuple1.print();
+		//tuple2.print();
 		HashMap<String, Integer> hashMap1 = op1.getColumnsHash();
+		//System.out.println(hashMap1);
 		HashMap<String, Integer> hashMap2 = op2.getColumnsHash();
+		//System.out.println(hashMap2);
 		for (int i = 0; i < orderByElements1.size(); i++) {
+			Column column1 = (Column) orderByElements1.get(i).getExpression();
+			Column column2 = (Column) orderByElements2.get(i).getExpression();
 			String columnName1 = orderByElements1.get(i).toString();
+			String alias1 = column1.getTable().getAlias();
+			if (alias1 != null) columnName1 = alias1 + "." + columnName1.split("\\.")[1];
+			//System.out.println(columnName1);
 			String columnName2 = orderByElements2.get(i).toString();
+			String alias2 = column2.getTable().getAlias();
+			if (alias2 != null) columnName2 = alias2 + "." + columnName2.split("\\.")[1];
+			//System.out.println(columnName2);
 			String attr1 = tuple1.getElement(hashMap1.get(columnName1));
+			//System.out.println("attr1 is: " + attr1);
+			//System.out.println(hashMap2.get(columnName2));
 			String attr2 = tuple2.getElement(hashMap2.get(columnName2));
+			//String attr2 = tuple2.getElement(1);
+			//System.out.println("attr2 is: " + attr2);
 			if (attr1.compareTo(attr2) < 0) return -1;
 			if (attr1.compareTo(attr2) > 0) return 1;
 		}

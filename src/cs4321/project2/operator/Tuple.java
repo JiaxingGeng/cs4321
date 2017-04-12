@@ -44,7 +44,7 @@ public class Tuple {
 	 *         no attribute
 	 */
 	public String getElement(int pos){
-		if (attributes != null && pos<attributes.length-1) 
+		if (attributes != null && pos<attributes.length) 
 			return attributes[pos];
 		else return null;
 	}
