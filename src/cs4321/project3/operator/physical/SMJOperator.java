@@ -94,6 +94,18 @@ public class SMJOperator extends Operator {
 
 	@Override
 	public Tuple getNextTuple() throws IOException {
+		/*
+		System.out.print("the left tuple is: ");
+		if (leftTuple != null) {
+			leftTuple.print();
+		}
+		else System.out.println("null");
+		System.out.print("the right tuple is: ");
+		if (rightTuple != null) {
+			rightTuple.print();
+		}
+		else System.out.println("null");
+		*/
 		if (leftTuple == null || rightTuple == null) {
 			needToRevert = false;
 			return null;
@@ -110,6 +122,7 @@ public class SMJOperator extends Operator {
 			if (needToRevert) {
 				needToRevert = false;
 				rightTuple = resetRight(revertPoint);
+				currRightIndex = revertPoint;
 				leftTuple = so1.getNextTuple();
 				return this.getNextTuple();
 			}
@@ -146,6 +159,12 @@ public class SMJOperator extends Operator {
 	 * @return
 	 */
 	public int compare(Tuple tuple1, Tuple tuple2) {
+		/*
+		System.out.print("comparing ");
+		tuple1.print();
+		System.out.print("and ");
+		tuple2.print();
+		*/
 		//tuple1.print();
 		//tuple2.print();
 		HashMap<String, Integer> hashMap1 = op1.getColumnsHash();
@@ -169,9 +188,18 @@ public class SMJOperator extends Operator {
 			String attr2 = tuple2.getElement(hashMap2.get(columnName2));
 			//String attr2 = tuple2.getElement(1);
 			//System.out.println("attr2 is: " + attr2);
-			if (attr1.compareTo(attr2) < 0) return -1;
-			if (attr1.compareTo(attr2) > 0) return 1;
+			//if (attr1.compareTo(attr2) < 0) {
+			if (Integer.parseInt(attr1) < Integer.parseInt(attr2)) {
+				//System.out.println("the result is: -1");
+				return -1;
+			}
+			//if (attr1.compareTo(attr2) > 0) {
+			if (Integer.parseInt(attr1) > Integer.parseInt(attr2)) {
+				//System.out.println("the result is: 1");
+				return 1;
+			}
 		}
+		//System.out.println("the result is: 0");
 		return 0;
 	}
 
