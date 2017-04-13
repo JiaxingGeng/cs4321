@@ -53,7 +53,7 @@ public class PhysicalPlanBuilder implements LogicalOperatorVisitor {
 		op.getRightChild().accept(visitorRight);
 		Operator opLeft = visitorLeft.getPhysicalPlan();
 		Operator opRight = visitorRight.getPhysicalPlan();
-		try{topOp = new BNLJOperator(opLeft,opRight,exp,4);}
+		try{topOp = new SMJOperator(opLeft,opRight,exp);}
 		catch(IOException e){System.out.println(e.getMessage());}
 	}
 

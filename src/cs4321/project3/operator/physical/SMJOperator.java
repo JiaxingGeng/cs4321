@@ -79,16 +79,16 @@ public class SMJOperator extends Operator {
 		//String exp_string = expression.toString();
 		//System.out.println(exp_string);
 		
-		leftTuple.print();
-		so1.dump();
-		System.out.println("*******************************");
-		rightTuple.print();
-		so2.dump();
-		System.out.println("*******************************");
-		so1.reset();
-		so1.getNextTuple();
-		so2.reset();
-		so2.getNextTuple();
+//		leftTuple.print();
+//		so1.dump();
+//		System.out.println("*******************************");
+//		rightTuple.print();
+//		so2.dump();
+//		System.out.println("*******************************");
+//		so1.reset();
+//		so1.getNextTuple();
+//		so2.reset();
+//		so2.getNextTuple();
 		
 	}
 
