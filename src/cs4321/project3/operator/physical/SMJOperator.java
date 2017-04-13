@@ -70,7 +70,11 @@ public class SMJOperator extends Operator {
 		}
 		*/
 		so1 = new SortOperator(op1, orderByElements1, new ArrayList<SelectItem> ());
+		//so1.dump();
+		//System.out.println("*******************************");
 		so2 = new SortOperator(op2, orderByElements2, new ArrayList<SelectItem> ());
+		//so2.dump();
+		//System.out.println("*******************************");
 		leftTuple = so1.getNextTuple();
 		rightTuple = so2.getNextTuple();
 		currRightIndex++;
@@ -106,9 +110,26 @@ public class SMJOperator extends Operator {
 		}
 		else System.out.println("null");
 		*/
-		if (leftTuple == null || rightTuple == null) {
+		if (leftTuple == null && rightTuple == null) {
 			needToRevert = false;
 			return null;
+		}
+		if (leftTuple == null && rightTuple != null) {
+			needToRevert = false;
+			return null;
+		}
+		if (leftTuple != null && rightTuple == null) {
+			if (needToRevert) {
+				rightTuple = resetRight(revertPoint);
+				currRightIndex = revertPoint;
+				leftTuple = so1.getNextTuple();
+				//leftTuple.print();
+				return this.getNextTuple();
+			}
+			else {
+				needToRevert = false;
+				return null;
+			}
 		}
 		if (compare(leftTuple, rightTuple) == 0) {
 			if (!needToRevert) revertPoint = currRightIndex;
@@ -116,6 +137,10 @@ public class SMJOperator extends Operator {
 			Tuple tempRightTuple = rightTuple;
 			rightTuple = so2.getNextTuple();
 			currRightIndex++;
+			
+			System.out.print("outputting ");
+			leftTuple.joins(tempRightTuple).print();
+			
 			return leftTuple.joins(tempRightTuple);
 		}
 		else {
@@ -124,11 +149,13 @@ public class SMJOperator extends Operator {
 				rightTuple = resetRight(revertPoint);
 				currRightIndex = revertPoint;
 				leftTuple = so1.getNextTuple();
+				//leftTuple.print();
 				return this.getNextTuple();
 			}
 			else {
 				if (compare(leftTuple, rightTuple) < 0) {
 					leftTuple = so1.getNextTuple();
+					//leftTuple.print();
 					return this.getNextTuple();
 				}
 				if (compare(leftTuple, rightTuple) > 0) {

@@ -63,7 +63,7 @@ public class SMJOperatorTest {
 		ScanOperator sol = new ScanOperator(tl);
 		ScanOperator sor = new ScanOperator(tr);
 		SMJOperator smjo = new SMJOperator(sol, sor, andExp);
-		smjo.dump();
+		//smjo.dump();
 		//jo.dump();
 		} catch (IOException e) {}
 	}
@@ -110,10 +110,10 @@ public class SMJOperatorTest {
 					int res2 = fc2.read(buffer2); 
 					if (res2 ==-1) fail();  // not having the same page
 					for(int j=0;j<4096;j++){
-						if (i==1&&j>8 && j%(4*5)==0) {
+						if (i==1 && j>8 && j%(4*5)==0) {
 							current_tuple = rd.readLine();
 						}
-						if (i==1&&j>8 && j%(4*8)==0) {
+						if (i==1 && j>8 && j%(4*8)==0) {
 							current_tuple = rd.readLine();
 						}
 						byte b1 = buffer1.get(j);
