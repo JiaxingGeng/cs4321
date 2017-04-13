@@ -138,8 +138,8 @@ public class SMJOperator extends Operator {
 			rightTuple = so2.getNextTuple();
 			currRightIndex++;
 			
-			System.out.print("outputting ");
-			leftTuple.joins(tempRightTuple).print();
+			//System.out.print("outputting ");
+			//leftTuple.joins(tempRightTuple).print();
 			
 			return leftTuple.joins(tempRightTuple);
 		}

@@ -34,7 +34,6 @@ public class SMJOperatorTest {
 //	}
 
 	@Test
-	// SELECT FROM TestTable1 TestTable2 WHERE TestTable1.J = TestTable2.K
 	public void testSMJOperator() {
 		System.out.println("-----------------------");
 		System.out.println("| testSMJOperator() |");
