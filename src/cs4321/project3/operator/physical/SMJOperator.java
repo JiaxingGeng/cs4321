@@ -14,6 +14,12 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.OrderByElement;
 
+/**
+ * SMJ Opeartor takes in two subsequent operators, and performs a Sort Merge Join on them. Currently the expressions for this
+ * SMJ Operator has to be a series of equality expressions between two columns connected by ANDs.
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ *
+ */
 public class SMJOperator extends Operator {
 	
 	List<OrderByElement> orderByElements1;
@@ -28,6 +34,14 @@ public class SMJOperator extends Operator {
 	int revertPoint;
 	int currRightIndex;
 
+	/**
+	 * Construct a SMJ Operator. Setup the variables, and sort both of the subsequent operators according to expression.
+	 * @param op1
+	 * @param op2
+	 * @param expression
+	 * @param bufferSize
+	 * @throws IOException
+	 */
 	public SMJOperator
 	(Operator op1, Operator op2, Expression expression, int bufferSize) throws IOException {
 		this.op1 = op1;
@@ -76,6 +90,9 @@ public class SMJOperator extends Operator {
 		
 	}
 
+	/**
+	 * Return the next tuple that qualifies.
+	 */
 	@Override
 	public Tuple getNextTuple() throws IOException {
 		if (leftTuple == null && rightTuple == null) {
@@ -130,6 +147,12 @@ public class SMJOperator extends Operator {
 		return null;
 	}
 	
+	/**
+	 * Reset rightTuple to the location specified by index.
+	 * @param index
+	 * @return
+	 * @throws IOException
+	 */
 	public Tuple resetRight(int index) throws IOException {
 		so2.reset();
 		Tuple tempTuple = rightTuple;
