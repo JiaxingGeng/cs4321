@@ -4,14 +4,27 @@ import cs4321.project2.operator.Tuple;
 import java.io.PrintWriter;
 import java.io.IOException;
 
+/**
+ * Use BufferedWriter to write outputs that are human readable
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326) 
+ *
+ */
 public class HumanReadableWriter implements TupleWriter {
 	
 	private PrintWriter writer;
-	
+	/**
+	 * Constructor of Human Readable Writer
+	 * @param dataPath location to write file
+	 * @throws IOException
+	 */
 	public HumanReadableWriter(String dataPath) throws IOException{
 		writer = new PrintWriter(dataPath, "UTF-8");
 	}
 
+	/**
+	 * Write Tuple t
+	 * @param t tuple to be written
+	 */
 	@Override
 	public void write(Tuple t) throws IOException{
 		int num = t.getColumns();
@@ -22,6 +35,9 @@ public class HumanReadableWriter implements TupleWriter {
 		writer.println();
 	}
 
+	/**
+	 * close the writer buffer
+	 */
 	@Override
 	public void close() throws IOException{
 		writer.close();

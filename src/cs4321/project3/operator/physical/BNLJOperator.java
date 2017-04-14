@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import cs4321.project2.deparser.ExpressionDeParser;
 import cs4321.project2.operator.*;
 import net.sf.jsqlparser.expression.Expression;
-
+/**
+ * Physical Operator for Block Nested Loop Join
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ *
+ */
 public class BNLJOperator extends Operator{
 	
 	private Operator leftOp;
@@ -49,7 +53,13 @@ public class BNLJOperator extends Operator{
 	}
 
 	/**
-	 * Return the next join tuple
+	 * Return the next join tuple. For each tuple in the inner loop,
+	 * we scan the elements in the block that is currently loaded in
+	 * memory. When the pointer reaches the end of the inner loop,
+	 * it means that all the join operations is finished for current
+	 * block. Then we load the next block. The join reaches the end when
+	 * it is the last block and the pointer of the inner loop also reaches
+	 * the end.
 	 */
 	public Tuple getNextTuple() throws IOException{
 		while (true){
@@ -58,11 +68,12 @@ public class BNLJOperator extends Operator{
 				rightTuple = rightOp.getNextTuple();
 				if (rightTuple==null) {
 					if (lastBlock) return null;
+					// rest inner operator and read the next block
 					rightOp.reset();
 					outerLoopTuples = readBlocks();
 					continue;
 				} else {
-					outerLoopPos = 0;
+					outerLoopPos = 0;  // scan current block for next inner tuple
 				}
 			}
 
@@ -113,7 +124,11 @@ public class BNLJOperator extends Operator{
 		else exp = expression.toString();
 		return "BNLJOperator: " + exp + " ";
 	}
-	
+	/**
+	 * Read tuples in one block and stored them in an array list
+	 * @return a list that stores the tuples of outer loop block
+	 * @throws IOException
+	 */
 	private ArrayList<Tuple> readBlocks() throws IOException{
 		int remainingTuples = tuplesPerScan;
 		ArrayList<Tuple> tupleList = new ArrayList<>();

@@ -2,7 +2,11 @@ package cs4321.project3.operator.logical;
 
 import java.util.List;
 import cs4321.project3.operator.*;
-
+/**
+ * Logical Project Operator that is used to build logical query plan
+ * 
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ */
 public class ProjectLogicalOperator extends LogicalOperator {
 	
 	private List<?> selectItems;
@@ -13,10 +17,18 @@ public class ProjectLogicalOperator extends LogicalOperator {
 		this.op = op;
 	}
 
+	/**
+	 * Get select Items
+	 * @return list of select items
+	 */
 	public List<?> getSelectItems(){
 		return selectItems;
 	}
 	
+	/**
+	 * Get child operator
+	 * @return child operator
+	 */
 	public LogicalOperator getChild(){
 		return op;
 	}

@@ -15,9 +15,15 @@ import cs4321.project3.IO.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.OrderByElement;
 import net.sf.jsqlparser.statement.select.SelectItem;
-
+/**
+ * Physical Operator for External Sort
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ *
+ */
 public class ExternalSortOperator extends Operator{
-	
+	// id is used to avoid reading same file across different
+	// sorting operator. Operators between queries also have
+	// different id number.
 	private static int currentID;
 	private int id;
 	
@@ -26,6 +32,9 @@ public class ExternalSortOperator extends Operator{
 	private String tempdir = "temp";
 	private String dataPath;
 	LinkedList<Integer> pos;
+	private boolean sortedFiles;
+	private Operator op;
+	private int bufferSize; 
 
 	public ExternalSortOperator
 	(Operator c, List<?> orderByElements, List<?> selectItems,int bufferSize) throws IOException{
@@ -35,35 +44,34 @@ public class ExternalSortOperator extends Operator{
 		tempdir = cat.getTempDir();
 		super.columns = c.getColumns();
 		pos = getPositionOrder(orderByElements,selectItems);
-		int lastPass = ExternalSort(c,bufferSize,pos);
-		File sortDir = new File(tempdir+File.separator+id);
-		if (!sortDir.exists()) {
-			sortDir.mkdirs();
-		}
-		dataPath = 
-				tempdir+File.separator+id+File.separator+"P"+lastPass+File.separator+"0"; 
-		bf = new BinaryReader(dataPath);
+		op = c;
+		this.bufferSize = bufferSize;
+		sortedFiles = false;
 	}
 
 
 	/**
-	 * Get the next tuple from this operator 
+	 * Sort the file and store result in temp directory if unsorted. 
+	 * Then get the next tuple from this operator. 
 	 * 	 * @return Tuple after operation 
 	 */
 	@Override
 	public Tuple getNextTuple() throws IOException {
+		if (!sortedFiles){
+			int lastPass = ExternalSort(op,bufferSize,pos);
+			File sortDir = new File(tempdir+File.separator+id);
+			if (!sortDir.exists()) {
+				sortDir.mkdirs();
+			}
+			dataPath = 
+					tempdir+File.separator+id+File.separator+"P"+lastPass+File.separator+"0"; 
+			bf = new BinaryReader(dataPath);
+			sortedFiles = true;
+		}
+		
 		String currentLine = bf.readLine();
 		if (currentLine == null) {
-			bf.close();
-			// delete all files: added to top later and include id
-//			File f = new File(tempdir);
-//			File[] passDirs = f.listFiles();
-//			for (File passDir:passDirs){
-//				File[] sortedFiles = passDir.listFiles();
-//				for (File sortedFile:sortedFiles)
-//					sortedFile.delete();
-//				passDir.delete();
-//			}	
+			bf.close();	
 			return null;
 		}
 		else {
@@ -85,6 +93,9 @@ public class ExternalSortOperator extends Operator{
 		}
 	}
 	
+	/**
+	 * Comparator to compare tuples
+	 */
 	private class CompareTuple implements Comparator<Tuple>{
 		private LinkedList<Integer> pos;
 
@@ -104,7 +115,11 @@ public class ExternalSortOperator extends Operator{
 			return 0;
 		}		
 	}
-	
+	/**
+	 * Comparator to compare readerNode, a list-like data structure
+	 * that can be seen in the following. This comparator is used for
+	 * priority queue in the merge pass. 
+	 */
 	private class CompareBlocks implements Comparator<ReaderNode>{
 		
 		private CompareTuple comp;
@@ -123,7 +138,14 @@ public class ExternalSortOperator extends Operator{
 		}
 		
 	}
-	
+	/**
+	 * Give a list of order that will be used for sort. If orderbyElements
+	 * exist, it go to the first. The second priority is selectItems. The 
+	 * corresponding index position will be added to the order list.
+	 * @param orderByElements elements from ORDER BY
+	 * @param selectItems elements from SELECT
+	 * @return position order
+	 */
 	private LinkedList<Integer> getPositionOrder
 	(List<?> orderByElements, List<?> selectItems){
 		HashMap<String,Integer> colToIndexHash = this.getColumnsHash();
@@ -164,7 +186,21 @@ public class ExternalSortOperator extends Operator{
 		}
 		return pos;
 	}
-	
+	/**
+	 * External Sort algorithm. In Pass 0, we load B blocks in memory, sort
+	 * the data and sort it in temp directory. In the later Pass, we load B-1
+	 * sorted blocks, sort them and store the result, until there is only 1 file
+	 * in the current output directory. When merge B-1 sorted blocks, I use a 
+	 * priority queue data structure. This allows the minimum value of current B-1
+	 * blocks to be at the top all the time. To sort these blocks, we pull the top
+	 * node, get its value and corresponding block. Then we read the next value of
+	 * this block and push it back to the queue.
+	 * @param op child operator
+	 * @param bufferSize buffersize for external sort
+	 * @param pos list of orders
+	 * @return number of last pass
+	 * @throws IOException
+	 */
 	private int ExternalSort
 	(Operator op, int bufferSize,LinkedList<Integer> pos) throws IOException{
 		// Pass 0
@@ -227,6 +263,7 @@ public class ExternalSortOperator extends Operator{
 				}
 			}
 			ReaderNode[] readers = rdList.toArray(new ReaderNode[rdList.size()]);
+			
 			// Use Priority Queue to Merge B-1 blocks
 			int remainingFileNum = readers.length;
 			int filePos = 0;
@@ -258,8 +295,6 @@ public class ExternalSortOperator extends Operator{
 				fileNum++;
 				writer.close();
 			}
-//			int outputBufferNum = readers.length / (bufferSize-1) +
-//					( (readers.length % (bufferSize-1)  == 0) ? 0 : 1);
 			if (readers.length<=bufferSize-1) lastPass = true;	
 			pass++;
 		}	

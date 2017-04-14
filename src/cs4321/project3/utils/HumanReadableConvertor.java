@@ -3,7 +3,11 @@ package cs4321.project3.utils;
 import cs4321.project3.IO.*;
 import cs4321.project2.operator.*;
 import java.io.*;
-
+/**
+ * Convert binary file to human readable file
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ *
+ */
 public class HumanReadableConvertor {
 	
 	public static void convert(String datapath,String output) throws IOException{

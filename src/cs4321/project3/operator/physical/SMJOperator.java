@@ -13,7 +13,6 @@ import cs4321.project3.deparser.SMJExpressionDeParser;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.OrderByElement;
-import net.sf.jsqlparser.statement.select.SelectItem;
 
 public class SMJOperator extends Operator {
 	

@@ -10,11 +10,23 @@ import cs4321.project3.operator.logical.*;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.statement.select.*;
 
+/**
+ * Generate Logical Query Plan from PlainSelect
+ * 
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326)
+ */
 public class LogicalPlanBuilder {
 	
 	LogicalOperator op;
 	Catalog catalog;
 	
+	/**
+	 * Construct a tree of logical operators, and store the head node 
+	 * into field op.
+	 * @param plainSelect a line of query
+	 * @param inputdir the directory of database, and schema files.
+	 * @throws IOException
+	 */
 	public LogicalPlanBuilder(PlainSelect plainSelect, String inputdir) 
 			throws IOException{
 		catalog = Catalog.getInstance();

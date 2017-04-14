@@ -63,9 +63,6 @@ public class SMJExpressionDeParser implements ExpressionVisitor, ItemsListVisito
 	private ArrayList<ArrayList<Column>> result;
 	private String[] tableNames;
 	
-	/**
-	 * 
-	 */
 	public SMJExpressionDeParser(String[] tableNames) {
 		result = new ArrayList<ArrayList<Column>> ();
 		this.tableNames = tableNames;

@@ -20,6 +20,11 @@ public class BinaryReader implements TupleReader {
 	private ByteBuffer buffer;
 	private FileChannel fc;
 	
+	/**
+	 * Constructor of Binary Reader
+	 * @param dataPath location to write file
+	 * @throws IOException
+	 */
 	public BinaryReader(String dataPath) throws IOException{
 		fin = new FileInputStream(dataPath);
 		fc = fin.getChannel();
@@ -27,6 +32,9 @@ public class BinaryReader implements TupleReader {
 		remainingTuples = 0;
 	}
 
+	/**
+	 * Read the current Line
+	 */
 	@Override
 	public String readLine() throws IOException {
 		if (remainingTuples == 0) {
@@ -45,12 +53,18 @@ public class BinaryReader implements TupleReader {
 		return tuple;
 	}
 
+	/**
+	 * Reset the operator
+	 */
 	@Override
 	public void reset() throws IOException {
 		fc.position(0);
 		remainingTuples = 0;
 	}
 
+	/**
+	 * Close the operator
+	 */
 	@Override
 	public void close() throws IOException {
 		fin.close();

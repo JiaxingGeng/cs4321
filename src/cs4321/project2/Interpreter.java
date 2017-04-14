@@ -24,6 +24,8 @@ import cs4321.project3.operator.logical.*;
  */
 
 public class Interpreter {
+	
+	static boolean outputTime = false;
 
 	public static void main(String[] args) {
 		try{
@@ -53,7 +55,13 @@ public class Interpreter {
 				Operator op = visitor.getPhysicalPlan();	
 				String txtName = outputdir + File.separator+"query" + Integer.toString(numQuery);
 				TupleWriter writer = new BinaryWriter(txtName);
+				long startTime = System.currentTimeMillis();
 				op.dump(writer);
+				long endTime = System.currentTimeMillis();
+				if (outputTime) {
+					System.out.println(plainSelect.toString());
+					System.out.println("duration:"+(endTime-startTime));
+				}
 				writer.close();
 				} catch (Exception e) {
 					FileOutputStream fos = new FileOutputStream(new File("exception.txt"), true);  
@@ -61,11 +69,27 @@ public class Interpreter {
 					e.printStackTrace(ps);
 					System.err.println(e.getMessage());
 				}
-			}			
+			}
+			// delete temporary files
+			File tempFile = new File(tempdir);
+			deleteDir(tempFile);
+			tempFile.mkdir();		
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
 		}
 	}
 
+	/**
+	 * recursively deleting all files in the folder
+	 */
+	private static void deleteDir(File file) {
+	    File[] contents = file.listFiles();
+	    if (contents != null) {
+	        for (File f : contents) {
+	            deleteDir(f);
+	        }
+	    }
+	    file.delete();
+	}
 }

@@ -44,26 +44,28 @@ public class JoinOperator extends Operator {
 	 * Return the next join tuple
 	 */
 	public Tuple getNextTuple() throws IOException{
-		if (leftTuple==null) return null;
-		Tuple rightTuple = rightOp.getNextTuple();
-		if (rightTuple==null) {
-			rightOp.reset();
-			rightTuple = rightOp.getNextTuple();
-			leftTuple = leftOp.getNextTuple();
-			if (leftTuple == null) return null;
-		}
-		Tuple joinTuple = leftTuple.joins(rightTuple);
-		if (expression == null){
-			return joinTuple;
-		} else {
-			ExpressionDeParser ev = new ExpressionDeParser(joinTuple, columnsHash);
-			expression.accept(ev);
-			if (Boolean.parseBoolean(ev.getResult())) {
+		while (true){
+			if (leftTuple==null) return null;
+			Tuple rightTuple = rightOp.getNextTuple();
+			if (rightTuple==null) {
+				rightOp.reset();
+				rightTuple = rightOp.getNextTuple();
+				leftTuple = leftOp.getNextTuple();
+				if (leftTuple == null) return null;
+			}
+			Tuple joinTuple = leftTuple.joins(rightTuple);
+			if (expression == null){
 				return joinTuple;
 			} else {
-				return this.getNextTuple();
+				ExpressionDeParser ev = new ExpressionDeParser(joinTuple, columnsHash);
+				expression.accept(ev);
+				if (Boolean.parseBoolean(ev.getResult())) {
+					return joinTuple;
+				} else {
+					continue;
+				}
 			}
-		}
+		}	
 	}
 
 	/**

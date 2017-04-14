@@ -18,29 +18,29 @@ public class ExternalSortOperatorTest {
 	public void testReaderNode() {
 		try{
 			Catalog.getInstance("input");
-			Table t1 = new Table(null,"Boats");
-			Operator op = new ScanOperator(t1);
-			Column c1 = new Column(t1,"E");
-			Column c2 = new Column(t1,"F");
-			SelectExpressionItem sexp1 = new SelectExpressionItem();
-			SelectExpressionItem sexp2 = new SelectExpressionItem();
-			sexp1.setExpression(c1);
-			sexp2.setExpression(c2);
-			List<SelectItem> sItems = new LinkedList<>();
-			sItems.add(sexp1);
-			sItems.add(sexp2);
+//			Table t1 = new Table(null,"Boats");
+//			Operator op = new ScanOperator(t1);
+//			Column c1 = new Column(t1,"E");
+//			Column c2 = new Column(t1,"F");
+//			SelectExpressionItem sexp1 = new SelectExpressionItem();
+//			SelectExpressionItem sexp2 = new SelectExpressionItem();
+//			sexp1.setExpression(c1);
+//			sexp2.setExpression(c2);
+//			List<SelectItem> sItems = new LinkedList<>();
+//			sItems.add(sexp1);
+//			sItems.add(sexp2);
 			
-//			BinaryWriter writer = new BinaryWriter("temp/Boats");
-//			int[] range = {200,200,200};
-//			RandomGenerator rg = new RandomGenerator(10000,3,range);
-//			ArrayList<Tuple> tuples = rg.getRandomTuples();
-//			for (Tuple t:tuples) writer.write(t);
-//			writer.close();
-//			HumanReadableConvertor.convert
-//			("temp/Boats", "temp/Boats_readable");	
+			BinaryWriter writer = new BinaryWriter("temp/Boats");
+			int[] range = {200,200,200};
+			RandomGenerator rg = new RandomGenerator(2000,3,range);
+			ArrayList<Tuple> tuples = rg.getRandomTuples();
+			for (Tuple t:tuples) writer.write(t);
+			writer.close();
+			HumanReadableConvertor.convert
+			("temp/Boats", "temp/Boats_readable");	
 			
 //			HumanReadableConvertor.convert ("output/query14", "output/query14_hm");			
-			HumanReadableConvertor.convert ("temp/2/P7/0", "temp/2/P7/0_hm");			
+//			HumanReadableConvertor.convert ("temp/2/P7/0", "temp/2/P7/0_hm");			
 			
 			
 //			

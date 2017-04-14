@@ -127,7 +127,10 @@ public class Catalog {
 		return tempDir;
 	}	
 	
-
+	/**
+	 * Extract configuration file from plan_builder_config
+	 * @throws IOException
+	 */
 	private static void extractConfig() throws IOException{
 		BufferedReader bf = new BufferedReader
 				(new FileReader(dir+File.separator+"plan_builder_config.txt"));
@@ -151,7 +154,11 @@ public class Catalog {
 		config[1] = sortConfig; 
 		
 	}
-	
+	/**
+	 * Current config file
+	 * @return config[0] stores the information of join
+	 * and config[1] stores the information of sort
+	 */
 	public int[][] getConfig(){
 		return config;
 	}

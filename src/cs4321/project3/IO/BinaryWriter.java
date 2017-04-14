@@ -6,6 +6,11 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 
+/**
+ * Use JavaNIO(ByteBuffer) to write pages in binary file format
+ * @author Jiaxing Geng (jg755), Yangyi Hao (yh326) 
+ *
+ */
 public class BinaryWriter implements TupleWriter {
 
 	private static final int PAGE_SIZE = 4096;
@@ -20,6 +25,11 @@ public class BinaryWriter implements TupleWriter {
 	private FileChannel fc;
 	private ByteBuffer buffer;
 
+	/**
+	 * Constructor of Binary Writer
+	 * @param dataPath location to write file
+	 * @throws IOException
+	 */
 	public BinaryWriter(String dataPath) throws IOException{
 		fout = new FileOutputStream(dataPath);
 		fc = fout.getChannel();
@@ -27,6 +37,10 @@ public class BinaryWriter implements TupleWriter {
 		firstBuffer = true;
 	}
 
+	/**
+	 * Write Tuple t
+	 * @param t tuple to be written
+	 */
 	@Override
 	public void write(Tuple t) throws IOException{
 		int tupleSize = t.getColumns()*4;
