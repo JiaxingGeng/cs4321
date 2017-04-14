@@ -15,7 +15,7 @@ import cs4321.project2.deparser.*;
  */
 public class DuplicateEliminationOperator extends Operator {
 
-	private SortOperator child;
+	private Operator child;
 	private Tuple lastTuple;
 	private List<Integer> posList;
 
@@ -26,7 +26,7 @@ public class DuplicateEliminationOperator extends Operator {
 	 * @throws IOException
 	 */
 	public DuplicateEliminationOperator
-	(SortOperator sortOperator, List<?> onSelectItems) 
+	(Operator sortOperator, List<?> onSelectItems) 
 			throws IOException{
 		super.columns = sortOperator.getColumns();
 		child = sortOperator;	

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import cs4321.project2.Catalog;
 import cs4321.project2.deparser.OnSelectItemVisitor;
 import cs4321.project2.operator.*;
 import cs4321.project3.IO.*;
@@ -30,6 +31,8 @@ public class ExternalSortOperator extends Operator{
 	(Operator c, List<?> orderByElements, List<?> selectItems,int bufferSize) throws IOException{
 		id = currentID;
 		currentID ++;
+		Catalog cat = Catalog.getInstance();
+		tempdir = cat.getTempDir();
 		super.columns = c.getColumns();
 		pos = getPositionOrder(orderByElements,selectItems);
 		int lastPass = ExternalSort(c,bufferSize,pos);
@@ -126,6 +129,8 @@ public class ExternalSortOperator extends Operator{
 		HashMap<String,Integer> colToIndexHash = this.getColumnsHash();
 		OnSelectItemVisitor visitor = new OnSelectItemVisitor(colToIndexHash);
 		LinkedList<Integer> pos = new LinkedList<>();
+		LinkedList<Integer> posTemp = new LinkedList<>();  // temporary storage
+		for (int j=0;j<columns.length;j++) posTemp.add(j);	
 		if (orderByElements!=null){
 			for (int i=0;i<orderByElements.size();i++){
 				OrderByElement oElement = (OrderByElement) orderByElements.get(i);
@@ -135,25 +140,33 @@ public class ExternalSortOperator extends Operator{
 				String alias = column.getTable().getAlias();
 				if (alias != null) tableName = alias;
 				pos.add(colToIndexHash.get(tableName+"."+columnName));
+				posTemp.set(colToIndexHash.get(tableName+"."+columnName),null);
 			}			
 		}
-		for (Object item:selectItems){
-			SelectItem selectItem =(SelectItem) item;
-			selectItem.accept(visitor);
-		}
-		LinkedList<Integer> pos2 = (LinkedList<Integer>) visitor.getResult();
-		if (pos2!=null){
-			for (int j=0;j<pos2.size();j++){
-				int index = pos2.get(j);
-				if (!pos.contains(index)) pos.add(index);
+		if (selectItems!=null){
+			for (Object item:selectItems){
+				SelectItem selectItem =(SelectItem) item;
+				selectItem.accept(visitor);
 			}
+			LinkedList<Integer> pos2 = (LinkedList<Integer>) visitor.getResult();
+			if (pos2!=null){
+				for (int j=0;j<pos2.size();j++){
+					int index = pos2.get(j);
+					if (!pos.contains(index)) {
+						pos.add(index);
+						posTemp.set(index, null);
+					}
+				}
+			}
+		}
+		for (int j=0;j<posTemp.size();j++){
+			if(posTemp.get(j)!=null) pos.add(posTemp.get(j));
 		}
 		return pos;
 	}
 	
 	private int ExternalSort
 	(Operator op, int bufferSize,LinkedList<Integer> pos) throws IOException{
-		
 		// Pass 0
 		int tuplesScanR0 = bufferSize*((PAZE_SIZE - 8)/(4*columns.length));
 		int remainingTuples = tuplesScanR0;
@@ -183,7 +196,6 @@ public class ExternalSortOperator extends Operator{
 				t = op.getNextTuple();
 			}	
 		}
-		
 		if (bufferList.size()>0){
 			CompareTuple comp = new CompareTuple(pos);
 			Collections.sort(bufferList, comp);	       // sort the blocks
@@ -194,6 +206,7 @@ public class ExternalSortOperator extends Operator{
 			}
 			writer.close();		
 		}
+		if (blockNumber ==0) return 0;
 		
 		// Remaining Pass
 		int pass = 1;
@@ -214,7 +227,6 @@ public class ExternalSortOperator extends Operator{
 				}
 			}
 			ReaderNode[] readers = rdList.toArray(new ReaderNode[rdList.size()]);
-			
 			// Use Priority Queue to Merge B-1 blocks
 			int remainingFileNum = readers.length;
 			int filePos = 0;
@@ -246,9 +258,9 @@ public class ExternalSortOperator extends Operator{
 				fileNum++;
 				writer.close();
 			}
-			int outputBufferNum = readers.length / (bufferSize-1) +
-					( (readers.length % (bufferSize-1)  == 0) ? 0 : 1);
-			if (outputBufferNum<bufferSize-1) lastPass = true;	
+//			int outputBufferNum = readers.length / (bufferSize-1) +
+//					( (readers.length % (bufferSize-1)  == 0) ? 0 : 1);
+			if (readers.length<=bufferSize-1) lastPass = true;	
 			pass++;
 		}	
 		pass--;

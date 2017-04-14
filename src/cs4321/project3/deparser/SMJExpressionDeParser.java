@@ -271,8 +271,8 @@ public class SMJExpressionDeParser implements ExpressionVisitor, ItemsListVisito
 		String tableLeftName = cl.getTable().getName(); // Maybe only need to call toString and auto change to alias
 		String tableLeftAlias = cl.getTable().getAlias();
 		Column cr = (Column) arg0.getRightExpression();
-		String tableRightName = cl.getTable().getName();
-		String tableRightAlias = cl.getTable().getAlias();
+//		String tableRightName = cl.getTable().getName();
+//		String tableRightAlias = cl.getTable().getAlias();
 		//System.out.println(cl.toString());
 		//System.out.println(cl.getTable().toString());
 		//System.out.println(cr.toString());

@@ -52,29 +52,31 @@ public class BNLJOperator extends Operator{
 	 * Return the next join tuple
 	 */
 	public Tuple getNextTuple() throws IOException{
-		if (outerLoopTuples == null) return null;
-		if (outerLoopPos >= outerLoopTuples.size()){	
-			rightTuple = rightOp.getNextTuple();
-			if (rightTuple==null) {
-				if (lastBlock) return null;
-				rightOp.reset();
-				outerLoopTuples = readBlocks();
-				return this.getNextTuple();
-			} else {
-				outerLoopPos = 0;
+		while (true){
+			if (outerLoopTuples == null) return null;
+			if (outerLoopPos >= outerLoopTuples.size()){	
+				rightTuple = rightOp.getNextTuple();
+				if (rightTuple==null) {
+					if (lastBlock) return null;
+					rightOp.reset();
+					outerLoopTuples = readBlocks();
+					continue;
+				} else {
+					outerLoopPos = 0;
+				}
 			}
-		}
 
-		Tuple leftTuple = outerLoopTuples.get(outerLoopPos);
-		outerLoopPos ++;
-		Tuple joinTuple = leftTuple.joins(rightTuple);
-		if (expression == null){
-			return joinTuple;
-		} else {
-			ExpressionDeParser ev = new ExpressionDeParser(joinTuple, columnsHash);
-			expression.accept(ev);
-			if (Boolean.parseBoolean(ev.getResult())) return joinTuple;
-			else return this.getNextTuple();	
+			Tuple leftTuple = outerLoopTuples.get(outerLoopPos);
+			outerLoopPos ++;
+			Tuple joinTuple = leftTuple.joins(rightTuple);
+			if (expression == null){
+				return joinTuple;
+			} else {
+				ExpressionDeParser ev = new ExpressionDeParser(joinTuple, columnsHash);
+				expression.accept(ev);
+				if (Boolean.parseBoolean(ev.getResult())) return joinTuple;
+				else continue;	
+			}
 		}
 	}
 

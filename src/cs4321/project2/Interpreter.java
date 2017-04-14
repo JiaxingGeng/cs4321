@@ -33,8 +33,9 @@ public class Interpreter {
 				("need three arguments: inputdir, outputdir and tempdir");
 			String inputdir = args[0];
 			String outputdir = args[1];
+			String tempdir = args[2];
 						
-			Catalog.getInstance(inputdir); // build catalog			
+			Catalog.getInstance(inputdir,tempdir); // build catalog			
 			// parse the data
 			CCJSqlParser parser = 
 					new CCJSqlParser(new FileReader(inputdir+File.separator+"queries.sql"));
@@ -42,7 +43,6 @@ public class Interpreter {
 			int numQuery = 0;
 			while ((statement = parser.Statement()) != null) {
 				numQuery++;
-				//System.out.println("*********Query number " + Integer.toString(numQuery) + "*********");
 				try{
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
@@ -51,8 +51,6 @@ public class Interpreter {
 				PhysicalPlanBuilder visitor = new PhysicalPlanBuilder();
 				logicalOp.accept(visitor);
 				Operator op = visitor.getPhysicalPlan();	
-//				PlanGenerator queriesPlan = new PlanGenerator(plainSelect,inputdir);
-//				Operator op = queriesPlan.getQueryPlan();
 				String txtName = outputdir + File.separator+"query" + Integer.toString(numQuery);
 				TupleWriter writer = new BinaryWriter(txtName);
 				op.dump(writer);

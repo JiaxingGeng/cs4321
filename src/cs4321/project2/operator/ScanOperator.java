@@ -27,7 +27,7 @@ public class ScanOperator extends Operator{
 	    fromItem.accept(selectVisitor);
 	    String[] tableTuple = selectVisitor.getResult().split("\\.");
 	    String tableName = tableTuple[0];
-		Catalog cat = Catalog.getInstance(null);
+		Catalog cat = Catalog.getInstance();
 		String[] attributes = cat.getAttributes(tableName);
 		numColumns = attributes.length;
 		String[] columns = new String[numColumns];

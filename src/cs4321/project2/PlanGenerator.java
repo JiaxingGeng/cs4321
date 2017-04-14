@@ -27,7 +27,7 @@ public class PlanGenerator {
 	 */
 	public PlanGenerator(PlainSelect plainSelect, String inputdir) 
 			throws IOException{
-		catalog = Catalog.getInstance(null);
+		catalog = Catalog.getInstance();
 		FromItem fromItem = plainSelect.getFromItem();
 		List<?> selectItems = plainSelect.getSelectItems();
 		List<?> fromJoins = plainSelect.getJoins();

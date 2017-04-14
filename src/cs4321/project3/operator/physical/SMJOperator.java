@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cs4321.project2.operator.Operator;
+import cs4321.project2.Catalog;
 import cs4321.project2.operator.SortOperator;
 import cs4321.project2.operator.Tuple;
 import cs4321.project3.deparser.SMJExpressionDeParser;
@@ -28,7 +29,8 @@ public class SMJOperator extends Operator {
 	int revertPoint;
 	int currRightIndex;
 
-	public SMJOperator(Operator op1, Operator op2, Expression expression) throws IOException {
+	public SMJOperator
+	(Operator op1, Operator op2, Expression expression, int bufferSize) throws IOException {
 		this.op1 = op1;
 		this.op2 = op2;
 		needToRevert = false;
@@ -58,8 +60,17 @@ public class SMJOperator extends Operator {
 			orderByElement.setExpression(orderByElementsInArray.get(1).get(i));
 			orderByElements2.add(orderByElement);
 		}
-		so1 = new SortOperator(op1, orderByElements1, new ArrayList<SelectItem> ());
-		so2 = new SortOperator(op2, orderByElements2, new ArrayList<SelectItem> ());
+		
+		Catalog cat = Catalog.getInstance();
+		int[][] config = cat.getConfig();
+		if (config[1][0]==0){ 
+		so1 = new SortOperator(op1, orderByElements1, null);
+		so2 = new SortOperator(op2, orderByElements2, null);
+		} else {
+			so1 = new ExternalSortOperator(op1, orderByElements1,null,bufferSize);
+			so2 = new ExternalSortOperator(op2, orderByElements2, null,bufferSize);
+		}
+		
 		leftTuple = so1.getNextTuple();
 		rightTuple = so2.getNextTuple();
 		currRightIndex++;

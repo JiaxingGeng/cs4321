@@ -48,7 +48,7 @@ public class SMJOperatorTest {
 		try{ Catalog.getInstance("input");
 		ScanOperator sol = new ScanOperator(tl);
 		ScanOperator sor = new ScanOperator(tr);
-		SMJOperator smjo = new SMJOperator(sol, sor, andExp);
+//		SMJOperator smjo = new SMJOperator(sol, sor, andExp,3);
 		} catch (IOException e) {}
 	}
 	
@@ -119,6 +119,47 @@ public class SMJOperatorTest {
 				fin2.close();		
 			}
 		} catch (Exception e){
+			fail();
+		}
+		
+		try{
+			for (int i=3;i<=4;i++){
+				System.out.println(i);
+				String s = "query"+i;
+				// check every byte
+				FileInputStream fin1 = new FileInputStream("./output_smj/"+s);
+				FileInputStream fin2 = new FileInputStream("./expected_smj/"+s);
+				FileChannel fc1 = fin1.getChannel();
+				FileChannel fc2 = fin2.getChannel();
+				ByteBuffer buffer1 = ByteBuffer.allocate( 4096 ); 
+				ByteBuffer buffer2 = ByteBuffer.allocate( 4096 );
+				String current_tuple=null;
+				int res = fc1.read(buffer1);
+				int block=0;
+				while (res!=-1){
+					int res2 = fc2.read(buffer2); 
+					if (res2 ==-1) fail();  // not having the same page
+					for(int j=0;j<4096;j++){
+
+						byte b1 = buffer1.get(j);
+						byte b2 = buffer2.get(j);
+						if(b1!=b2){
+						System.out.println("wrong pos block num:"+block);
+						System.out.println("wrong pos:"+j);
+						System.out.println("somewhere around this tuple:"+current_tuple);
+						}
+						assertEquals(b1,b2);
+					}
+					buffer1 = ByteBuffer.allocate( 4096 ); 
+					buffer2 = ByteBuffer.allocate( 4096 );
+					res = fc1.read(buffer1);
+					block++;
+				}		
+				fin1.close();
+				fin2.close();		
+			}
+		} catch (Exception e){
+			e.printStackTrace();
 			fail();
 		}
 	}

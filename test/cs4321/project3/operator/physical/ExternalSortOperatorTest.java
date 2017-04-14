@@ -37,15 +37,18 @@ public class ExternalSortOperatorTest {
 //			for (Tuple t:tuples) writer.write(t);
 //			writer.close();
 //			HumanReadableConvertor.convert
-//			("temp/Boats", "temp/Boats_readable");			
+//			("temp/Boats", "temp/Boats_readable");	
 			
-
+//			HumanReadableConvertor.convert ("output/query14", "output/query14_hm");			
+			HumanReadableConvertor.convert ("temp/2/P7/0", "temp/2/P7/0_hm");			
 			
-			ExternalSortOperator opSort = new ExternalSortOperator(op,null,sItems,3);
-			opSort.getNextTuple().print();
-			opSort.getNextTuple().print();
-			opSort.getNextTuple().print();
 			
+//			
+//			ExternalSortOperator opSort = new ExternalSortOperator(op,null,sItems,3);
+//			opSort.getNextTuple().print();
+//			opSort.getNextTuple().print();
+//			opSort.getNextTuple().print();
+//			
 		} catch (Exception e){
 			e.printStackTrace();
 		}

@@ -93,7 +93,7 @@ public class BinaryWriterTest {
 		try{
 			for (int i=1;i<=12;i++){
 				String s = "query"+i+"_sorted";
-				//			System.out.println(s);
+							System.out.println(s);
 				// check every byte
 				FileInputStream fin1 = new FileInputStream("./output/"+s);
 				FileInputStream fin2 = new FileInputStream("./expected/"+s);
@@ -129,7 +129,7 @@ public class BinaryWriterTest {
 		try{
 			for (int i=13;i<=15;i++){
 				String s = "query"+i;
-				//			System.out.println(s);
+							System.out.println(s);
 				// check every byte
 				FileInputStream fin1 = new FileInputStream("./output/"+s);
 				FileInputStream fin2 = new FileInputStream("./expected/"+s);

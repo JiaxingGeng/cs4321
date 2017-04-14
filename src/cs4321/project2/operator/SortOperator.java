@@ -70,17 +70,19 @@ public class SortOperator extends Operator {
 				posTemp.set(colToIndexHash.get(tableName+"."+columnName),null);
 			}			
 		}
-		for (Object item:selectItems){
-			SelectItem selectItem =(SelectItem) item;
-			selectItem.accept(visitor);
-		}
-		LinkedList<Integer> pos2 = (LinkedList<Integer>) visitor.getResult();
-		if (pos2!=null){
-			for (int j=0;j<pos2.size();j++){
-				int index = pos2.get(j);
-				if (!pos.contains(index)){
-					pos.add(index);
-					posTemp.set(index, null);
+		if (selectItems !=null){
+			for (Object item:selectItems){
+				SelectItem selectItem =(SelectItem) item;
+				selectItem.accept(visitor);
+			}
+			LinkedList<Integer> pos2 = (LinkedList<Integer>) visitor.getResult();
+			if (pos2!=null){
+				for (int j=0;j<pos2.size();j++){
+					int index = pos2.get(j);
+					if (!pos.contains(index)){
+						pos.add(index);
+						posTemp.set(index, null);
+					}
 				}
 			}
 		}
