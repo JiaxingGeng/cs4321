@@ -23,6 +23,7 @@ import net.sf.jsqlparser.schema.Table;
 
 public class SMJOperatorTest {
 
+	/*
 	@Test
 	public void testSMJOperator() {
 		System.out.println("-----------------------");
@@ -51,6 +52,7 @@ public class SMJOperatorTest {
 //		SMJOperator smjo = new SMJOperator(sol, sor, andExp,3);
 		} catch (IOException e) {}
 	}
+	*/
 	
 	@Test
 	public void test(){

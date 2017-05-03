@@ -69,6 +69,7 @@ public class PhysicalPlanBuilder implements LogicalOperatorVisitor {
 	 * depends on config file. It can be TNLJ,BNLJ or SMJ.
 	 */
 	public void visit(JoinLogicalOperator op){
+		//System.out.println("visiting a join logical operator");
 		Expression exp = op.getExpression();
 		PhysicalPlanBuilder visitorLeft = new PhysicalPlanBuilder();
 		PhysicalPlanBuilder visitorRight = new PhysicalPlanBuilder();
@@ -85,7 +86,9 @@ public class PhysicalPlanBuilder implements LogicalOperatorVisitor {
 			}
 			if (config[0][0]==2){
 				int bufferSize = config[1][1];
+				//System.out.println("buffer size is" + bufferSize);
 				topOp = new SMJOperator(opLeft,opRight,exp,bufferSize);
+				//System.out.println("constructed a topOp");
 			}
 		}catch(IOException e)
 			{System.out.println(e.getMessage());}

@@ -3,6 +3,9 @@ package cs4321.project3.IO;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.nio.channels.FileChannel;
+
+import cs4321.project2.operator.Tuple;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -51,6 +54,26 @@ public class BinaryReader implements TupleReader {
 		bufferPos += 4;
 		remainingTuples --;
 		return tuple;
+	}
+	
+	/**
+	 * Read the current line. Construct and return a tuple
+	 */
+	public Tuple readLineReturnTuple() throws IOException {
+		if (remainingTuples == 0) {
+			int res = startNewBuffer();
+			if (res == -1) return null;
+		}
+		Tuple t;
+		String[] tupleAttributes = new String[numAttributes];
+		for (int i = 0; i < numAttributes; i++) {
+			int val = buffer.getInt(bufferPos);
+			tupleAttributes[i] = Integer.toString(val);
+		}
+		t = new Tuple(tupleAttributes);
+		bufferPos += 4;
+		remainingTuples--;
+		return t;
 	}
 
 	/**

@@ -28,6 +28,7 @@ public class Interpreter {
 	static boolean outputTime = false;
 
 	public static void main(String[] args) {
+		//System.out.println("in main");
 		try{
 			// check input arguments
 			if (args == null || args.length != 3)
@@ -45,18 +46,25 @@ public class Interpreter {
 			int numQuery = 0;
 			while ((statement = parser.Statement()) != null) {
 				numQuery++;
+				//System.out.println(numQuery);
 				try{
 				Select select = (Select) statement;
 				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
 				LogicalPlanBuilder logicalPlan = new LogicalPlanBuilder(plainSelect,inputdir);
+				
 				LogicalOperator logicalOp = logicalPlan.getLogicalPlan();
+				//System.out.println("here?");
 				PhysicalPlanBuilder visitor = new PhysicalPlanBuilder();
+				//System.out.println("here");
 				logicalOp.accept(visitor);
+				//System.out.println("here");
 				Operator op = visitor.getPhysicalPlan();	
 				String txtName = outputdir + File.separator+"query" + Integer.toString(numQuery);
 				TupleWriter writer = new BinaryWriter(txtName);
 				long startTime = System.currentTimeMillis();
-				op.dump(writer);
+				//op.dump(writer);
+				//System.out.println("dumping");
+				op.dump();
 				long endTime = System.currentTimeMillis();
 				if (outputTime) {
 					System.out.println(plainSelect.toString());
