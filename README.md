@@ -1,1 +1,1 @@
-# cs4321 Project 2
+# cs4321 Database Practicum project
